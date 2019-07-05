@@ -9,24 +9,52 @@ import { ToDo } from '../models/todos';
 export class ContentComponent implements OnInit {
 
   todos = [];
+  todosDone = [];
   taskText: string;
-  totalTaskToComplete = 0;
 
   constructor() {
-    this.todos = [];
-    this.taskText = '';
+    this.initComDadosFake();
    }
 
   ngOnInit() {
   }
 
+  getTotalToDoToComplete(){
+    return this.todos.length;
+  }
+
+  getTotalToDoDone(){
+    return this.todosDone.length;
+  }  
+
+  initComDadosFake(){
+    this.todos = [this.getTodoFake(), this.getTodoFake(), this.getTodoFake()];
+    this.todosDone = [this.getTodoDoneFake(), this.getTodoDoneFake(), this.getTodoDoneFake()];
+  }
+  markAsCompleted(){
+    console.log('completed');
+  }
+
   addToDo() {
-    const todo = new ToDo();
-    todo.name = 'teste';
+    this.todos.push(this.getTodoFake());
+  }
+
+  getTodoFake(){
+    var todo = new ToDo();
+    todo.name = 'teste todo';
     todo.dateStr = 'Dec 25, 2008 8:03 pm';
     todo.done = false;
 
-    this.todos.push(todo);
-    this.totalTaskToComplete++;
+    return todo;
   }
+
+  getTodoDoneFake(){
+    var todo = new ToDo();
+    todo.name = 'teste todo done';
+    todo.dateStr = 'Dec 25, 2008 8:03 pm';
+    todo.dateCompleteStr = 'Apr 18, 2009 11:03 am';
+    todo.done = true;
+
+    return todo;
+  }  
 }
