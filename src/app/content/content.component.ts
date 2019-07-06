@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDo } from '../models/todos';
 import { FormBuilder } from '@angular/forms';
-import { timeout } from 'q';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-content',
@@ -16,13 +16,14 @@ export class ContentComponent implements OnInit {
   taskText: string;
   errMsg: string;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private appService: AppService) {
     this.checkoutForm = this.formBuilder.group({
       taskName: ''
     });    
    }
 
   ngOnInit() {
+    this.todos = this.appService.getTasks();
   }
 
   getTotalToDoToComplete(){
