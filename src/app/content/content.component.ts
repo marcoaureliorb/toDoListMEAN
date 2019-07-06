@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDo } from '../models/todos';
+import { FormBuilder } from '@angular/forms';
+import { timeout } from 'q';
 
 @Component({
   selector: 'app-content',
@@ -7,13 +9,17 @@ import { ToDo } from '../models/todos';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
-
+  
+  checkoutForm;
   todos = [];
   todosDone = [];
   taskText: string;
+  errMsg: string;
 
-  constructor() {
-    this.initComDadosFake();
+  constructor(private formBuilder: FormBuilder) {
+    this.checkoutForm = this.formBuilder.group({
+      taskName: ''
+    });    
    }
 
   ngOnInit() {
@@ -27,34 +33,46 @@ export class ContentComponent implements OnInit {
     return this.todosDone.length;
   }  
 
-  initComDadosFake(){
-    this.todos = [this.getTodoFake(), this.getTodoFake(), this.getTodoFake()];
-    this.todosDone = [this.getTodoDoneFake(), this.getTodoDoneFake(), this.getTodoDoneFake()];
-  }
-  markAsCompleted(){
-    console.log('completed');
+  markAsCompleted(todo){
+    this.todos = this.todos.filter(x => x.id != todo.id);
+    todo.dateCompleteStr = new Date().toLocaleString();
+    this.todosDone.push(todo);
   }
 
-  addToDo() {
-    this.todos.push(this.getTodoFake());
+  createToDo(todo){
+    var newToDo = new ToDo();
+    newToDo.name = todo.taskName;
+    newToDo.dateStr = new Date().toLocaleString();
+    newToDo.done = false;
+    newToDo.id = this.todos.length;
+    return newToDo;
+  }  
+
+  onAddToDo(todo) {
+    
+    if (todo.taskName == undefined || todo.taskName == ''){
+      this.errMsg = 'Task is not clear';
+      
+      setTimeout(() => {
+        this.errMsg = null;
+      }, 2000);
+    }
+    else{
+      this.todos.push(this.createToDo(todo));
+      this.checkoutForm.reset();
+      this.errMsg = '';
+    }
   }
 
-  getTodoFake(){
-    var todo = new ToDo();
-    todo.name = 'teste todo';
-    todo.dateStr = 'Dec 25, 2008 8:03 pm';
-    todo.done = false;
-
-    return todo;
+  editToDo(todo) {
+    
   }
 
-  getTodoDoneFake(){
-    var todo = new ToDo();
-    todo.name = 'teste todo done';
-    todo.dateStr = 'Dec 25, 2008 8:03 pm';
-    todo.dateCompleteStr = 'Apr 18, 2009 11:03 am';
-    todo.done = true;
+  deleteToDo(todo){
+    this.todos = this.todos.filter(x => x.id != todo.id);
+  }
 
-    return todo;
+  deleteToDoDone(todo){
+    this.todosDone = this.todosDone.filter(x => x.id != todo.id);
   }  
 }
