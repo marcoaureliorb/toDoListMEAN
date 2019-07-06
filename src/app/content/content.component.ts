@@ -41,12 +41,7 @@ export class ContentComponent implements OnInit {
   }
 
   createToDo(todo){
-    var newToDo = new ToDo();
-    newToDo.name = todo.taskName;
-    newToDo.dateStr = new Date().toLocaleString();
-    newToDo.done = false;
-    newToDo.id = this.todos.length;
-    return newToDo;
+    return new ToDo(this.todos.length, todo.taskName, new Date().toLocaleString());
   }  
 
   onAddToDo(todo) {
