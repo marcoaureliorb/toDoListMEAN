@@ -9,66 +9,57 @@ import { AppService } from '../app.service';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
-  
+ 
   checkoutForm;
-  todos = [];
-  todosDone = [];
   taskText: string;
   errMsg: string;
 
   constructor(private formBuilder: FormBuilder, private appService: AppService) {
     this.checkoutForm = this.formBuilder.group({
-      taskName: ''
+      todoName: ''
     });    
    }
 
   ngOnInit() {
-    this.todos = this.appService.getTasks();
   }
 
   getTotalToDoToComplete(){
-    return this.todos.length;
+    return this.appService.getAllTodos().filter(x=> !x.done).length;
   }
 
   getTotalToDoDone(){
-    return this.todosDone.length;
+    return this.appService.getAllTodos().filter(x=> x.done).length;
   }  
 
-  markAsCompleted(todo){
-    this.todos = this.todos.filter(x => x.id != todo.id);
-    todo.dateCompleteStr = new Date().toLocaleString();
-    this.todosDone.push(todo);
+  todosNotDone(){
+    let x = this.appService.getAllTodos().filter(x=> !x.done); 
+    console.log(x);
+    return x;
   }
 
-  createToDo(todo){
-    return new ToDo(this.todos.length, todo.taskName, new Date().toLocaleString());
+  todosDone(){
+    return this.appService.getAllTodos().filter(x=> x.done); 
   }  
 
-  onAddToDo(todo) {
+  markAsCompleted(todo: ToDo){
+    this.appService.markAsCompleted(todo);
+  }
+
+  createToDo(name: string){
+    return new ToDo(0, name, new Date().toLocaleString());
+  }  
+
+  onAddToDo(todoForm) {
     
-    if (todo.taskName == undefined || todo.taskName == ''){
-      this.errMsg = 'Task is not clear';
-      
-      setTimeout(() => {
-        this.errMsg = null;
-      }, 2000);
-    }
-    else{
-      this.todos.push(this.createToDo(todo));
+    if (!(todoForm.todoName == undefined || todoForm.todoName == '')){
+      var newTodo = this.createToDo(todoForm.todoName)
+      this.appService.insert(newTodo);
       this.checkoutForm.reset();
       this.errMsg = '';
     }
   }
 
-  editToDo(todo) {
-    
+  deleteToDo(todo: ToDo){
+    this.appService.delete(todo.id);
   }
-
-  deleteToDo(todo){
-    this.todos = this.todos.filter(x => x.id != todo.id);
-  }
-
-  deleteToDoDone(todo){
-    this.todosDone = this.todosDone.filter(x => x.id != todo.id);
-  }  
 }

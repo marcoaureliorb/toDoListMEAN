@@ -1,3 +1,5 @@
+import { VirtualTimeScheduler } from 'rxjs';
+
 export class ToDo {
 
     id : number;
@@ -10,5 +12,7 @@ export class ToDo {
         this.id = id;
         this.name = name;
         this.dateStr = dateStr;
+        this.done = false;
+        this.dateCompleteStr = '';
     }
 }
