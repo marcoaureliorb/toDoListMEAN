@@ -9,7 +9,7 @@ import { AppService } from '../app.service';
   styleUrls: ['./content.component.css']
 })
 export class ContentComponent implements OnInit {
- 
+
   checkoutForm;
   taskText: string;
   errMsg: string;
@@ -17,49 +17,47 @@ export class ContentComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private appService: AppService) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
-    });    
+    });
    }
 
   ngOnInit() {
   }
 
-  getTotalToDoToComplete(){
-    return this.appService.getAllTodos().filter(x=> !x.done).length;
+  getTotalToDoToComplete() {
+    return this.appService.getAllTodos().filter(x => !x.done).length;
   }
 
-  getTotalToDoDone(){
-    return this.appService.getAllTodos().filter(x=> x.done).length;
-  }  
-
-  todosNotDone(){
-    let x = this.appService.getAllTodos().filter(x=> !x.done); 
-    console.log(x);
-    return x;
+  getTotalToDoDone() {
+    return this.appService.getAllTodos().filter(x => x.done).length;
   }
 
-  todosDone(){
-    return this.appService.getAllTodos().filter(x=> x.done); 
-  }  
+  todosNotDone() {
+    return this.appService.getAllTodos().filter(x => !x.done);
+  }
 
-  markAsCompleted(todo: ToDo){
+  todosDone() {
+    return this.appService.getAllTodos().filter(x => x.done);
+  }
+
+  markAsCompleted(todo: ToDo) {
     this.appService.markAsCompleted(todo);
   }
 
-  createToDo(name: string){
+  createToDo(name: string) {
     return new ToDo(0, name, new Date().toLocaleString());
-  }  
+  }
 
   onAddToDo(todoForm) {
-    
-    if (!(todoForm.todoName == undefined || todoForm.todoName == '')){
-      var newTodo = this.createToDo(todoForm.todoName)
+
+    if (!(todoForm.todoName === undefined || todoForm.todoName === '')) {
+      const newTodo = this.createToDo(todoForm.todoName);
       this.appService.insert(newTodo);
       this.checkoutForm.reset();
       this.errMsg = '';
     }
   }
 
-  deleteToDo(todo: ToDo){
+  deleteToDo(todo: ToDo) {
     this.appService.delete(todo.id);
   }
 }
