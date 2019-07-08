@@ -12,7 +12,6 @@ export class ContentComponent implements OnInit {
 
   checkoutForm;
   taskText: string;
-  errMsg: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
 
