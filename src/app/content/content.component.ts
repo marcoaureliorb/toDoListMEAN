@@ -13,6 +13,8 @@ export class ContentComponent implements OnInit {
   checkoutForm;
   taskText: string;
   errMsg: string;
+  todosDone: Array<ToDo>;
+  todosNotDone: Array<ToDo>;
 
   constructor(private formBuilder: FormBuilder, private appService: AppService) {
     this.checkoutForm = this.formBuilder.group({
@@ -21,43 +23,50 @@ export class ContentComponent implements OnInit {
    }
 
   ngOnInit() {
+    this.todosDone = this.appService.getAllTodosDone();
+    this.todosNotDone = this.appService.getAllTodosNotDone();
   }
 
-  getTotalToDoToComplete() {
-    return this.appService.getAllTodos().filter(x => !x.done).length;
+  getTotalToDoNotDone(): number {
+    return this.todosNotDone.length;
   }
 
-  getTotalToDoDone() {
-    return this.appService.getAllTodos().filter(x => x.done).length;
-  }
-
-  todosNotDone() {
-    return this.appService.getAllTodos().filter(x => !x.done);
-  }
-
-  todosDone() {
-    return this.appService.getAllTodos().filter(x => x.done);
+  getTotalToDoDone(): number {
+    return this.todosDone.length;
   }
 
   markAsCompleted(todo: ToDo) {
-    this.appService.markAsCompleted(todo);
-  }
 
-  createToDo(name: string) {
-    return new ToDo(0, name, new Date().toLocaleString());
+    todo.dateComplete = new Date();
+    todo.done = true;
+
+    this.todosDone.push(todo);
+
+    this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
+
+    this.appService.markAsCompleted(todo);
   }
 
   onAddToDo(todoForm) {
 
-    if (!(todoForm.todoName == undefined || todoForm.todoName == '')) {
-      const newTodo = this.createToDo(todoForm.todoName);
+    console.log(todoForm);
+    console.log(todoForm.todoName);
+    if (!(todoForm.todoName === null || todoForm.todoName === '')) {
+      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date()});
+      this.todosNotDone.push(newTodo);
       this.appService.insert(newTodo);
       this.checkoutForm.reset();
-      this.errMsg = '';
     }
   }
 
   deleteToDo(todo: ToDo) {
+
+    if (todo.done) {
+      this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
+    } else {
+      this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
+    }
+
     this.appService.delete(todo.id);
   }
 }

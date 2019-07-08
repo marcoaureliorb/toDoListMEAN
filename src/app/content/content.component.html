@@ -6,7 +6,7 @@
                     <input type="text" id="todoName" formControlName="todoName" class="form-control" placeholder="Add new todo">
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-outline-secondary">
-                            <i class="fas fa-plus-square text-primary"></i>
+                            <i class="fa fa-plus"></i>
                         </button>
                     </div>
             </div>
@@ -15,14 +15,14 @@
     </form>
     <div class="row">
         <div class="col">
-            <h5>Task toDo <span class="badge badge-light text-secondary">{{getTotalToDoToComplete()}}</span></h5>
+            <h5>Task toDo <span class="badge badge-light text-secondary">{{getTotalToDoNotDone()}}</span></h5>
                     <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todo of todosNotDone()">
+                            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todo of todosNotDone">
                                 {{todo.name}}
                                 <span>
-                                    <small class="text-muted">{{todo.dateStr}}</small>
-                                    <button class="btn btn-light" type="button" (click)="markAsCompleted(todo)"><i class="fa fa-check text-success" aria-hidden="true"></i></button>
-                                    <button class="btn btn-light" type="button" (click)="deleteToDo(todo)" ><i class="fas fa-trash-alt text-danger"></i></button>
+                                    <small class="text-muted">{{todo.dateCreate | date:"MM/dd/yyyy hh:mm:ss"}}</small>
+                                    <button class="btn btn-light" type="button" (click)="markAsCompleted(todo)"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                    <button class="btn btn-light" type="button" (click)="deleteToDo(todo)" ><i class="fa fa-trash-o"></i></button>
                                 </span>
                             </li>
                         </ul>
@@ -33,12 +33,12 @@
         <div class="col">
             <h5>Completed Task <span class="badge badge-light text-secondary">{{getTotalToDoDone()}}</span></h5>
             <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todoDone of todosDone()">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todoDone of todosDone">
                         {{todoDone.name}}
                         <span>
-                            <small class="text-muted">{{todoDone.dateCompleteStr}} </small>
+                            <small class="text-muted">{{todoDone.dateComplete | date:"MM/dd/yyyy hh:mm:ss"}} </small>
                             <button class="btn btn-light" type="button" (click)="deleteToDo(todoDone)">
-                                <i class="fas fa-trash-alt text-danger"></i>
+                                <i class="fa fa-trash-o"></i>
                             </button>
                         </span>
                     </li>

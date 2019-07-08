@@ -6,56 +6,57 @@ import { ToDo} from './models/todo';
 })
 export class AppService {
 
-  toDoKeyLocalStorage : string = "todos";
+  toDoKeyLocalStorage = 'todos';
 
   constructor() { }
-  
-  getAllTodos(){
-    return this.getToDosFromLocalStorage();
+
+  getAllTodosNotDone(): Array<ToDo> {
+    return this.getToDosFromLocalStorage().filter((x: ToDo) => !x.done);
   }
 
-  insert(todo: ToDo){
-    let todos = this.getToDosFromLocalStorage();
+  getAllTodosDone(): Array<ToDo> {
+    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done);
+  }
+
+  insert(todo: ToDo) {
+    const todos = this.getToDosFromLocalStorage();
     todo.id = todos.length + 1;
     todos.push(todo);
     this.setToDosToLocalStorage(todos);
   }
 
-  delete(id: number){
+  delete(id: number) {
     let todos = this.getToDosFromLocalStorage();
-    todos = todos.filter(x => x.id != id);
-    this.setToDosToLocalStorage(todos);       
+    todos = todos.filter((x: ToDo) => x.id !== id);
+    this.setToDosToLocalStorage(todos);
   }
 
-  update(todo: ToDo){
+  update(todo: ToDo) {
     let todos = this.getToDosFromLocalStorage();
-    todos = todos.filter(x => x.id != todo.id);
+    todos = todos.filter((x: ToDo) => x.id !== todo.id);
     todos.push(todo);
-    this.setToDosToLocalStorage(todos);    
+    this.setToDosToLocalStorage(todos);
   }
 
-  markAsCompleted(todo: ToDo){
-    let todos = this.getToDosFromLocalStorage();
-    todos.forEach(element => {
-      console.log(element);
-      if(element.id == todo.id){
-        element.dateCompleteStr = new Date().toLocaleString();
+  markAsCompleted(todo: ToDo) {
+    const todos = this.getToDosFromLocalStorage();
+    todos.forEach((element: ToDo) => {
+      if (element.id === todo.id) {
+        element.dateComplete = new Date();
         element.done = true;
       }
     });
-    
-    console.log("Gravando");
+
     this.setToDosToLocalStorage(todos);
-    console.log("Gravou");
   }
 
-  getToDosFromLocalStorage(){
-    let todos = JSON.parse(localStorage.getItem(this.toDoKeyLocalStorage));
+  getToDosFromLocalStorage() {
+    const todos = JSON.parse(localStorage.getItem(this.toDoKeyLocalStorage));
     return todos || [];
   }
 
-  setToDosToLocalStorage(todos: ToDo[]){
-    let _todos = JSON.stringify(todos);
-    localStorage.setItem(this.toDoKeyLocalStorage, _todos);
+  setToDosToLocalStorage(todos: ToDo[]) {
+    const newTodos = JSON.stringify(todos);
+    localStorage.setItem(this.toDoKeyLocalStorage, newTodos);
   }
 }
