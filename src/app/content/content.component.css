@@ -1,3 +1,7 @@
+.content{
+    height: 85vh;
+    margin-top: 20px;
+}
 .dateTime{
     color: gray;
     padding: 3px;

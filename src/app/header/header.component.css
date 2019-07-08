@@ -1,6 +1,10 @@
-#title{
+.header{
+    /*height: 10vh;*/
+    margin-top: 10px;
     text-align: center;
-    background-color:whitesmoke;
+    background:whitesmoke;
     color:  rgb(38, 77, 115);
     border-radius: 5px;
+    box-shadow: 0 2px 5px -2px grey;    
+    font-style: italic;
 }

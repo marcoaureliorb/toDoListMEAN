@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToDo } from '../models/todos';
+import { ToDo} from '../models/todo';
 import { FormBuilder } from '@angular/forms';
 import { AppService } from '../app.service';
 
