@@ -20,7 +20,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todo of todosNotDone()">
                                 {{todo.name}}
                                 <span>
-                                    <small class="text-muted">{{todo.dateStr}} </small>
+                                    <small class="text-muted">{{todo.dateStr}}</small>
                                     <button class="btn btn-light" type="button" (click)="markAsCompleted(todo)"><i class="fa fa-check text-success" aria-hidden="true"></i></button>
                                     <button class="btn btn-light" type="button" (click)="deleteToDo(todo)" ><i class="fas fa-trash-alt text-danger"></i></button>
                                 </span>
@@ -36,7 +36,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todoDone of todosDone()">
                         {{todoDone.name}}
                         <span>
-                            <small class="text-muted">completed on {{todoDone.dateCompleteStr}} </small>
+                            <small class="text-muted">{{todoDone.dateCompleteStr}} </small>
                             <button class="btn btn-light" type="button" (click)="deleteToDo(todoDone)">
                                 <i class="fas fa-trash-alt text-danger"></i>
                             </button>

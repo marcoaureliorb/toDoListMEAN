@@ -49,7 +49,7 @@ export class ContentComponent implements OnInit {
 
   onAddToDo(todoForm) {
 
-    if (!(todoForm.todoName === undefined || todoForm.todoName === '')) {
+    if (!(todoForm.todoName == undefined || todoForm.todoName == '')) {
       const newTodo = this.createToDo(todoForm.todoName);
       this.appService.insert(newTodo);
       this.checkoutForm.reset();
