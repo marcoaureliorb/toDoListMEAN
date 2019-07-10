@@ -1,12 +1,7 @@
-  .row {
-    margin-top: 10px;
-  }
-  
-  .col {
-    padding: 10px;
-  }
-  
-  input{
-    border: solid 1px #626880;
-    background-color: #202542 !important;
-  }
+.row {
+  margin-top: 10px;
+}
+
+.col {
+  padding: 10px;
+}
