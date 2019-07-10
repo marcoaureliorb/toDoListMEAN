@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDo} from '../models/todo';
 import { FormBuilder } from '@angular/forms';
-import { AppService } from '../app.service';
+import { ContentService } from './content.service';
 
 @Component({
   selector: 'app-content',
@@ -15,15 +15,15 @@ export class ContentComponent implements OnInit {
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
 
-  constructor(private formBuilder: FormBuilder, private appService: AppService) {
+  constructor(private formBuilder: FormBuilder, private contentService: ContentService) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
     });
    }
 
   ngOnInit() {
-    this.todosDone = this.appService.getAllTodosDone();
-    this.todosNotDone = this.appService.getAllTodosNotDone();
+    this.todosDone = this.contentService.getAllTodosDone();
+    this.todosNotDone = this.contentService.getAllTodosNotDone();
   }
 
   getTotalToDoNotDone(): number {
@@ -43,7 +43,7 @@ export class ContentComponent implements OnInit {
 
     this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
 
-    this.appService.markAsCompleted(todo);
+    this.contentService.markAsCompleted(todo);
   }
 
   onAddToDo(todoForm) {
@@ -53,7 +53,7 @@ export class ContentComponent implements OnInit {
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
       const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date()});
       this.todosNotDone.push(newTodo);
-      this.appService.insert(newTodo);
+      this.contentService.insert(newTodo);
       this.checkoutForm.reset();
     }
   }
@@ -66,6 +66,6 @@ export class ContentComponent implements OnInit {
       this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
     }
 
-    this.appService.delete(todo.id);
+    this.contentService.delete(todo.id);
   }
 }
