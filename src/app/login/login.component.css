@@ -5,3 +5,7 @@
 .col {
   padding: 10px;
 }
+
+.cross-validation-error input {
+  border-left: 5px solid red;
+}

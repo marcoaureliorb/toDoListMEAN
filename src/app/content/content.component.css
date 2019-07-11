@@ -1,12 +1,21 @@
-.content{
-    height: 85vh;
-    margin-top: 20px;
-}
-.dateTime{
-    color: gray;
-    padding: 3px;
-}
-
 span button{
     margin: 2px 2px 2px 2px;
 }
+
+.user-info {
+    max-width: 100px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    vertical-align: top;
+    line-height: 15px;
+    position: relative;
+    top: 6px;
+}
+
+.row {
+    margin-top: 5px;
+  }
+  
