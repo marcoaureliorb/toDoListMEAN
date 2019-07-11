@@ -10,12 +10,12 @@ import { LoginService } from './login.service';
 })
 export class LoginComponent implements OnInit {
 
-  isShow: boolean = false;
+  isShow: false;
   checkoutForm: FormGroup;
   isValid = true;
   errMsg = '';
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private loginService: LoginService) { 
+  constructor(private router: Router, private formBuilder: FormBuilder, private loginService: LoginService) {
     this.checkoutForm = this.formBuilder.group({
       user: ['', Validators.required],
       password: ['', Validators.required],
@@ -29,13 +29,12 @@ export class LoginComponent implements OnInit {
   login(form) {
       console.log(form);
 
-      var user = form.user;
-      var password = form.password;
-      
-      if(this.loginService.login(user, password)){
+      const user = form.user;
+      const password = form.password;
+
+      if (this.loginService.login(user, password)) {
         this.router.navigate(['main']);
-      }
-      else{
+      } else {
        this.isValid = false;
        this.errMsg = 'invalid user';
       }
