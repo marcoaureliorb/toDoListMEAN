@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ToDo} from '../models/todo';
 import { FormBuilder } from '@angular/forms';
+
+import { ToDo} from '../models/todo';
 import { ContentService } from './content.service';
 
 @Component({
@@ -14,16 +15,19 @@ export class ContentComponent implements OnInit {
   taskText: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
+  listName: string;
 
   constructor(private formBuilder: FormBuilder, private contentService: ContentService) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
     });
+
+    this.listName = 'default';
    }
 
   ngOnInit() {
-    this.todosDone = this.contentService.getAllTodosDone();
-    this.todosNotDone = this.contentService.getAllTodosNotDone();
+    this.todosDone = this.contentService.getAllTodosDone(this.listName);
+    this.todosNotDone = this.contentService.getAllTodosNotDone(this.listName);
   }
 
   getTotalToDoNotDone(): number {
@@ -51,7 +55,7 @@ export class ContentComponent implements OnInit {
     console.log(todoForm);
     console.log(todoForm.todoName);
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
-      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date()});
+      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), list: this.listName});
       this.todosNotDone.push(newTodo);
       this.contentService.insert(newTodo);
       this.checkoutForm.reset();

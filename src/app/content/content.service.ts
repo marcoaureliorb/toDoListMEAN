@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { ToDo} from '../models/todo';
 
 @Injectable({
@@ -9,12 +10,12 @@ export class ContentService {
 
   constructor() { }
 
-  getAllTodosNotDone(): Array<ToDo> {
-    return this.getToDosFromLocalStorage().filter((x: ToDo) => !x.done);
+  getAllTodosNotDone(listName: string): Array<ToDo> {
+    return this.getToDosFromLocalStorage().filter((x: ToDo) => !x.done && x.list === listName);
   }
 
-  getAllTodosDone(): Array<ToDo> {
-    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done);
+  getAllTodosDone(listName: string): Array<ToDo> {
+    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done && x.list === listName);
   }
 
   insert(todo: ToDo) {
