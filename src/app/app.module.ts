@@ -8,7 +8,8 @@ import { HeaderComponent } from './header/header.component';
 import { ContentComponent } from './content/content.component';
 import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
-
+import { AuthenticationService  } from 'AuthenticationService';
+import { authenticationGard } from 'authenticationGuard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,7 @@ import { FooterComponent } from './footer/footer.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [AuthenticationService , authenticationGard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

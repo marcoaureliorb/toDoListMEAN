@@ -44,9 +44,7 @@
       <hr>
       <div class="row">
         <div class=col>
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          Add list
-          <input type="text" class="form-control" placeholder="task name">
+          <input type="text" class="form-control" placeholder="new task name">
         </div>
       </div>                 
     </div>
@@ -76,8 +74,8 @@
             <div class="col">
                 <h6>Task toDo <span class="badge badge-light text-secondary">{{getTotalToDoNotDone()}}</span></h6>
                         <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let todo of todosNotDone">
-                                    {{todo.name}}
+                                <li class="list-group-item d-flex justify-content-between align-items-left" *ngFor="let todo of todosNotDone">
+                                  {{todo.name}}
                                     <span>
                                         <small class="text-muted">{{todo.dateCreate | date:"MM/dd/yyyy hh:mm:ss"}}</small>
                                         <button class="btn btn-light btn-sm" type="button" (click)="markAsCompleted(todo)"><i class="fa fa-check" aria-hidden="true"></i></button>

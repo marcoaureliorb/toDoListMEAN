@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { LoginService } from './login.service';
+import { AuthenticationService } from 'AuthenticationService';
 
 @Component({
   selector: 'app-login',
@@ -16,15 +16,18 @@ export class LoginComponent implements OnInit {
   isValid = true;
   errMsg = '';
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private loginService: LoginService) {
-    this.checkoutForm = this.formBuilder.group({
-      user: ['', Validators.required],
-      password: ['', Validators.required],
-      rememberMe: ''
-    });
-  }
+  constructor(private formBuilder: FormBuilder, private router: Router, private authenticationService : AuthenticationService ) {
+    if (this.authenticationService.currentUser) { 
+      this.router.navigate(['/']);
+    }
+   }
 
   ngOnInit() {
+    this.checkoutForm = this.formBuilder.group({
+      user: ['marcoaureliorb@gmail.com', Validators.required],
+      password: ['marco123', Validators.required],
+      rememberMe: ''
+    });    
   }
 
   login(form) {
@@ -33,11 +36,11 @@ export class LoginComponent implements OnInit {
       const user = form.user;
       const password = form.password;
 
-      if (this.loginService.login(user, password)) {
+      if (this.authenticationService.login(user, password)) {
         this.router.navigate(['main']);
       } else {
        this.isValid = false;
-       this.errMsg = 'invalid user';
+       this.errMsg = 'email or password is incorrect';
       }
   }
 }
