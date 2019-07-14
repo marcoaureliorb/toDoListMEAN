@@ -14,30 +14,13 @@
       <div class="row">
         <div class=col>Personalized List</div>
       </div>           
-      <div class="row">
-        <div class=col>
-          <i class="fa fa-building" aria-hidden="true"></i>
-          Work
-        </div>
-      </div>           
-      <div class="row">
-        <div class=col>
-          <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-          School
-         </div>
-      </div>           
-      <div class="row">
-        <div class=col>
-          <i class="fa fa-home" aria-hidden="true"></i>
-          Home
-        </div>
-      </div>           
-      <div class="row">
-        <div class=col>
-          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-          Shopping
-        </div>
-      </div>           
+      <ul class="list-group">
+        <div class="row" *ngFor="let list of personalizedList">
+          <div class=col>
+              {{list.name}}
+          </div>
+        </div>         
+    </ul>      
       <div class="row">
         <div class=col></div>
       </div>           

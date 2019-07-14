@@ -11,7 +11,6 @@ import { AuthenticationService } from 'AuthenticationService';
 })
 export class LoginComponent implements OnInit {
 
-  isShow: false;
   checkoutForm: FormGroup;
   isValid = true;
   errMsg = '';
@@ -31,8 +30,6 @@ export class LoginComponent implements OnInit {
   }
 
   login(form) {
-      console.log(form);
-
       const user = form.user;
       const password = form.password;
 

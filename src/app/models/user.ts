@@ -1,9 +1,11 @@
 export class User{
     id: number;
+    firstName: string;
+    lastName: string;
     email: string;
-    pass: string;
+    password: string;
 
     constructor(init?: Partial<User>){
-        Object.assign(init);
+        Object.assign(this, init);
     }
 }

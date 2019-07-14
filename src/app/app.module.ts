@@ -10,13 +10,15 @@ import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { AuthenticationService  } from 'AuthenticationService';
 import { authenticationGard } from 'authenticationGuard';
+import { RegisterComponent } from './register/register.component';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     ContentComponent,
     LoginComponent,
-    FooterComponent
+    FooterComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

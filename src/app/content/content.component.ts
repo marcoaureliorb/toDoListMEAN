@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 
 import { ToDo} from '../models/todo';
 import { ContentService } from './content.service';
+import { PersonalizedList } from '../models/personbalizedList';
 
 @Component({
   selector: 'app-content',
@@ -15,6 +16,7 @@ export class ContentComponent implements OnInit {
   taskText: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
+  personalizedList: Array<PersonalizedList>;
   listName: string;
 
   constructor(private formBuilder: FormBuilder, private contentService: ContentService) {
@@ -28,6 +30,7 @@ export class ContentComponent implements OnInit {
   ngOnInit() {
     this.todosDone = this.contentService.getAllTodosDone(this.listName);
     this.todosNotDone = this.contentService.getAllTodosNotDone(this.listName);
+    this.personalizedList = this.contentService.getPersonalizedList();
   }
 
   getTotalToDoNotDone(): number {
@@ -48,6 +51,13 @@ export class ContentComponent implements OnInit {
     this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
 
     this.contentService.markAsCompleted(todo);
+  }
+
+  onAddPersonalizedList(listName){
+    if(this.personalizedList.indexOf(listName) < 0){
+      this.personalizedList.push(listName);
+      this.contentService.insertPersonalizedList(listName);
+    }
   }
 
   onAddToDo(todoForm) {

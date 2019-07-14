@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 
 import { ToDo} from '../models/todo';
+import { PersonalizedList} from '../models/personbalizedList';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentService {
+  
   toDoKeyLocalStorage = 'todos';
+  personalizedList = 'personalizedList';
 
   constructor() { }
 
+  getPersonalizedList(): Array<PersonalizedList>{
+    return this.getPersonalizedListFromLocalStorage();
+  }
   getAllTodosNotDone(listName: string): Array<ToDo> {
     return this.getToDosFromLocalStorage().filter((x: ToDo) => !x.done && x.list === listName);
   }
@@ -17,6 +23,12 @@ export class ContentService {
   getAllTodosDone(listName: string): Array<ToDo> {
     return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done && x.list === listName);
   }
+
+  insertPersonalizedList(listName: string) {
+    const personalizedList = this.getPersonalizedListFromLocalStorage();
+    personalizedList.push(listName);
+    this.setPersonalizedListToLocalStorage(personalizedList);    
+  }  
 
   insert(todo: ToDo) {
     const todos = this.getToDosFromLocalStorage();
@@ -48,6 +60,16 @@ export class ContentService {
     });
 
     this.setToDosToLocalStorage(todos);
+  }
+
+  getPersonalizedListFromLocalStorage(){
+    const personalizedList = JSON.parse(localStorage.getItem(this.personalizedList));
+    return personalizedList || [];
+  }
+
+  setPersonalizedListToLocalStorage(personalizedList: PersonalizedList[]){
+    const newPersonalizedList = JSON.stringify(personalizedList);
+    localStorage.setItem(this.personalizedList, newPersonalizedList);
   }
 
   getToDosFromLocalStorage() {
