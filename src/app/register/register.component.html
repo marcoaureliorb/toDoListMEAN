@@ -1,43 +1,61 @@
 <form [formGroup]="fg" (ngSubmit)="register(fg.value)">
-        <div class="form-group align-self-center align-items-center">
+    <div class="form-group align-self-center align-items-center">
+        <div class="row justify-content-center">
+            <div class="col-6 text-center">
+                <label class="text-muted">
+                    <h1>
+                        <i class="fa fa-list-ul" aria-hidden="true"></i> To-Do
+                    </h1>
+                </label>
+            </div>
+        </div>
+        <div *ngIf="registerOk">
             <div class="row justify-content-center">
-                <div class="col-6 text-center">
+                <div class="col-3 text-center">
                     <label class="text-muted">
-                        <h1>
-                                <i class="fa fa-list-ul" aria-hidden="true"></i> To-Do
-                        </h1>
+                        <h3>
+                            Registration successful
+                        </h3>
                     </label>
+                    <a routerLink="/login" class="btn btn-block btn-outline-secondary">Go to login page</a>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                    <div class="col-4">
-                        <input type="text" class="form-control ng-invalid" placeholder="First name" id="firstName" formControlName="firstName" required>
-                    </div>
-                </div>
-                <div class="row justify-content-center">
-                        <div class="col-4">
-                            <input type="text" class="form-control ng-invalid" placeholder="Last name" id="lastName" formControlName="lastName" required>
-                        </div>
-                    </div>                            
+        </div>
+        <div *ngIf="!registerOk">
             <div class="row justify-content-center">
                 <div class="col-4">
-                    <input type="text" class="form-control ng-invalid" placeholder="Email" id="email" formControlName="email" required>
+                    <input type="text" class="form-control ng-invalid" placeholder="First name" id="firstName"
+                        formControlName="firstName" required>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
-                    <input type="text" class="form-control" placeholder="Password" id="password" formControlName="password" required>
+                    <input type="text" class="form-control ng-invalid" placeholder="Last name" id="lastName"
+                        formControlName="lastName" required>
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-2 text-center" >
-                    <button id="btnSignIn" type="submit" [disabled]="!fg.valid" class="btn btn-block btn-outline-secondary">
+                <div class="col-4">
+                    <input type="text" class="form-control ng-invalid" placeholder="Email" id="email"
+                        formControlName="email" required>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <input type="text" class="form-control" placeholder="Password" id="password"
+                        formControlName="password" required>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-2 text-center">
+                    <button id="btnSignIn" type="submit" [disabled]="!fg.valid"
+                        class="btn btn-block btn-outline-secondary">
                         Register
                     </button>
                 </div>
-                <div class="col-2 text-center" >
-                        <a routerLink="/login" class="btn btn-block btn-outline-secondary">Cancel</a>
-                    </div>                
+                <div class="col-2 text-center">
+                    <a routerLink="/login" class="btn btn-block btn-outline-secondary">Cancel</a>
+                </div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
@@ -51,4 +69,5 @@
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>

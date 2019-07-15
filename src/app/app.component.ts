@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   title = 'toDoList';
 
   constructor(private authenticatorService: AuthenticationService){
-
+    
   }
 
   ngOnInit() {

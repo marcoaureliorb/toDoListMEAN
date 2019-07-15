@@ -9,7 +9,7 @@ export class authenticationGard implements CanActivate{
     }
 
     canActivate(){
-        if(this.authenticationService .isAuthenticated()){
+        if(this.authenticationService.isAuthenticated()){
             return true;
         }
         else{

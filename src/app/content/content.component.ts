@@ -25,12 +25,14 @@ export class ContentComponent implements OnInit {
     });
 
     this.listName = 'default';
+    console.log('ContentComponent_constructor');
    }
 
   ngOnInit() {
     this.todosDone = this.contentService.getAllTodosDone(this.listName);
     this.todosNotDone = this.contentService.getAllTodosNotDone(this.listName);
     this.personalizedList = this.contentService.getPersonalizedList();
+    console.log('ContentComponent_ngOnInit');
   }
 
   getTotalToDoNotDone(): number {

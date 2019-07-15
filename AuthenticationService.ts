@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/app/models/user';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthenticationService {
-  
-    currentUser: User = null;
+    
+    public currentUser: User = null;
     userDatabase = 'users';
   
-    constructor() { }
+    constructor() {
+     }
 
     login(user: string, pass: string){
   
@@ -17,24 +19,25 @@ export class AuthenticationService {
   
       if(usuario.length > 0){
           this.currentUser = usuario[0];
-          console.log('currentUser:' + this.currentUser);
           return true;
       }
 
       return false;
     }
 
+    isAuthenticated() {
+      return this.currentUser != null;
+    }    
+
     register(firstName: string, lastName: string, email: string, password: string) {
       
       let users = this.getUsersFromLocalStorage();
 
       if( users.filter(x => x.email === email).length){
-        throw new Error('email já cadastrado.');
+        throw new Error('Email "a" is already taken.');
       }
 
       const user = new User({id: users.length + 1, firstName, lastName, email, password});  
-
-      console.log(user);
       users.push(user);
       this.setUsersToLocalStorage(users);
     }    
@@ -48,10 +51,4 @@ export class AuthenticationService {
       const newUsers  = JSON.stringify(users);
       localStorage.setItem(this.userDatabase, newUsers);
     }      
-
-    isAuthenticated(){
-        console.log(this.currentUser);
-        
-        return this.currentUser != null;
-    }
 }

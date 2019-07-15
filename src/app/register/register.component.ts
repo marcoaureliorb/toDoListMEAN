@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   fg : FormGroup;
   isValid = true;
   errMsg = '';
+  registerOk = false;
 
   constructor(private formBuilder : FormBuilder, private router: Router, private authenticationService : AuthenticationService) { }
 
@@ -33,7 +34,7 @@ export class RegisterComponent implements OnInit {
 
     try{
       this.authenticationService.register(firstName, lastName, email, password);
-      this.router.navigate(['']);
+      this.registerOk = true;
     }
     catch(e){
       this.isValid = false;
