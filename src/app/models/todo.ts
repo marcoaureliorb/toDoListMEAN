@@ -4,8 +4,8 @@ export class ToDo {
     name: string;
     list: string;
     dateCreate: Date;
-    dateComplete: Date;
     done: boolean;
+    star: boolean;
 
     constructor(init?: Partial<ToDo>) {
         Object.assign(this, init);

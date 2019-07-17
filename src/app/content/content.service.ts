@@ -7,7 +7,7 @@ import { PersonalizedList} from '../models/personbalizedList';
   providedIn: 'root'
 })
 export class ContentService {
-  
+ 
   toDoKeyLocalStorage = 'todos';
   personalizedList = 'personalizedList';
 
@@ -24,9 +24,9 @@ export class ContentService {
     return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done && x.list === listName);
   }
 
-  insertPersonalizedList(listName: string) {
+  insertPersonalizedList(list: PersonalizedList) {
     const personalizedList = this.getPersonalizedListFromLocalStorage();
-    personalizedList.push(listName);
+    personalizedList.push(list);
     this.setPersonalizedListToLocalStorage(personalizedList);    
   }  
 
@@ -54,13 +54,24 @@ export class ContentService {
     const todos = this.getToDosFromLocalStorage();
     todos.forEach((element: ToDo) => {
       if (element.id === todo.id) {
-        element.dateComplete = new Date();
         element.done = true;
       }
     });
 
     this.setToDosToLocalStorage(todos);
   }
+
+  markAsNotCompleted(todo: ToDo) {
+    const todos = this.getToDosFromLocalStorage();
+    todos.forEach((element: ToDo) => {
+      if (element.id === todo.id) {
+        console.log(element);
+        element.done = false;
+      }
+    });
+
+    this.setToDosToLocalStorage(todos);
+  }  
 
   getPersonalizedListFromLocalStorage(){
     const personalizedList = JSON.parse(localStorage.getItem(this.personalizedList));

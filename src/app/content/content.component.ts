@@ -13,6 +13,7 @@ import { PersonalizedList } from '../models/personbalizedList';
 export class ContentComponent implements OnInit {
 
   checkoutForm;
+  personalizedListForm;
   taskText: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
@@ -22,6 +23,10 @@ export class ContentComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private contentService: ContentService) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
+    });
+
+    this.personalizedListForm = this.formBuilder.group({
+      listName: ''
     });
 
     this.listName = 'default';
@@ -43,9 +48,15 @@ export class ContentComponent implements OnInit {
     return this.todosDone.length;
   }
 
-  markAsCompleted(todo: ToDo) {
+  changeStarState(todo: ToDo){
+    this.todosNotDone.forEach(element => {
+      if(element.id == todo.id){
+        element.star = !element.star;
+      }
+    });
+  }
 
-    todo.dateComplete = new Date();
+  markAsCompleted(todo: ToDo) {
     todo.done = true;
 
     this.todosDone.push(todo);
@@ -55,19 +66,26 @@ export class ContentComponent implements OnInit {
     this.contentService.markAsCompleted(todo);
   }
 
-  onAddPersonalizedList(listName){
-    if(this.personalizedList.indexOf(listName) < 0){
-      this.personalizedList.push(listName);
-      this.contentService.insertPersonalizedList(listName);
-    }
+  markAsNotCompleted(todo: ToDo){
+    todo.done = false;
+
+    this.todosNotDone.push(todo);
+
+    this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
+
+    this.contentService.markAsNotCompleted(todo);    
+  }
+
+  onAddPersonalizedList(personalizedListForm){
+      const newPersonalizedList = new PersonalizedList({id: this.personalizedList.length + 1, name: personalizedListForm.listName}); 
+      this.personalizedList.push(newPersonalizedList);
+      this.contentService.insertPersonalizedList(newPersonalizedList);
+      this.personalizedListForm.reset();
   }
 
   onAddToDo(todoForm) {
-
-    console.log(todoForm);
-    console.log(todoForm.todoName);
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
-      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), list: this.listName});
+      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), list: this.listName, star: false});
       this.todosNotDone.push(newTodo);
       this.contentService.insert(newTodo);
       this.checkoutForm.reset();
