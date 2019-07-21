@@ -96,6 +96,7 @@
                   </div>
                   <input type="text" class="form-control bg-transparent" disabled value="{{todoDone.name}}">
                   <div class="input-group-append">
+                      <button type="button" class="btn btn-outline-secondary" (click)="changeStarState(todoDone)"><i [ngClass]="(todoDone.star)?'fa fa-star':'fa fa-star-o'"></i></button>
                       <button type="button" class="btn btn-outline-secondary" (click)="deleteToDo(todoDone)"><i class="fa fa-trash-o"></i></button>
                   </div>
                 </div>
