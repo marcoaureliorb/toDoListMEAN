@@ -14,32 +14,32 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-4">
-                <input type="text" class="form-control" placeholder="Password" id="password" formControlName="password" required>
+                <input type="password" class="form-control" placeholder="Password" id="password" formControlName="password" required>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-2 text-center">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="rememberMe">
-                    <label class="form-check-label" for="rememberMe">
+                    <small class="form-check-label" for="rememberMe">
                         Remember Me
-                    </label>
+                    </small>
                 </div>
             </div>
             <div class="col-2 text-center">
-                <label>
-                   <a class="" href="#">Forgot your password?</a>
-                </label>
+                <small>
+                   <a class="text-dark" href="#">Forgot your password?</a>
+                </small>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-3 text-center" >
-                <button id="btnSignIn" type="submit" [disabled]="!checkoutForm.valid" class="btn btn-primary">
+            <div class="col-2 text-center" >
+                <button id="btnSignIn" type="submit" [disabled]="!checkoutForm.valid" class="btn btn-light btn-block">
                     Sign in
                 </button>
             </div>
-            <div class="col-3 text-center" >
-                <a routerLink="/register" class="btn btn-primary">Register</a>
+            <div class="col-2 text-center" >
+                <a routerLink="/register" class="btn btn-light btn-block">Register</a>
             </div>
         </div>
         <div class="row justify-content-center" *ngIf="!isValid">

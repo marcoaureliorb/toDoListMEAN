@@ -102,4 +102,10 @@ export class ContentComponent implements OnInit {
 
     this.contentService.delete(todo.id);
   }
+
+  deletePersonalizedList(list: PersonalizedList){
+    console.log(list);
+    this.personalizedList = this.personalizedList.filter(x => x.id !== list.id);
+    this.contentService.deletePersonalizedList(list.id);    
+  }
 }

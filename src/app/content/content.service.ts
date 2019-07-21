@@ -43,6 +43,12 @@ export class ContentService {
     this.setToDosToLocalStorage(todos);
   }
 
+  deletePersonalizedList(id: number) {
+    let personalizedList = this.getPersonalizedListFromLocalStorage();
+    personalizedList = personalizedList.filter((x: PersonalizedList) => x.id !== id);
+    this.setPersonalizedListToLocalStorage(personalizedList);
+  }
+
   update(todo: ToDo) {
     let todos = this.getToDosFromLocalStorage();
     todos = todos.filter((x: ToDo) => x.id !== todo.id);
