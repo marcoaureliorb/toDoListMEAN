@@ -4,6 +4,8 @@ import { FormBuilder } from '@angular/forms';
 import { ToDo} from '../models/todo';
 import { List } from '../models/List';
 import { ContentService } from './content.service';
+import { DialogComponent } from '../shared/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-content',
@@ -20,7 +22,7 @@ export class ContentComponent implements OnInit {
   personalizedList: Array<List>;
   idlist: number;
 
-  constructor(private formBuilder: FormBuilder, private contentService: ContentService) {
+  constructor(private formBuilder: FormBuilder, private contentService: ContentService, public dialog: MatDialog) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
     });
@@ -91,13 +93,23 @@ export class ContentComponent implements OnInit {
 
   deleteToDo(todo: ToDo) {
 
-    if (todo.done) {
-      this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
-    } else {
-      this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
-    }
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '250px',
+      data: {message: 'Do you delete this todo?' , title: 'Confirm' }
+    });
 
-    this.contentService.deleteToDo(todo.id);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result !== undefined && result) {
+        if (todo.done) {
+          this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
+        } else {
+        this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
+        }
+
+        this.contentService.deleteToDo(todo.id);
+      }
+    });
   }
 
   deletePersonalizedList(list: List) {

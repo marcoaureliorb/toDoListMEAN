@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +13,8 @@ import { FooterComponent } from './footer/footer.component';
 import { AuthenticationService  } from 'AuthenticationService';
 import { authenticationGard } from 'authenticationGuard';
 import { RegisterComponent } from './register/register.component';
+import { DialogComponent } from './shared/dialog/dialog.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,14 +22,18 @@ import { RegisterComponent } from './register/register.component';
     ContentComponent,
     LoginComponent,
     FooterComponent,
-    RegisterComponent
+    RegisterComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    BrowserAnimationsModule
   ],
+  entryComponents: [DialogComponent],
   providers: [AuthenticationService , authenticationGard],
   bootstrap: [AppComponent]
 })
