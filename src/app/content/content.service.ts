@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { ToDo} from '../models/todo';
-import { PersonalizedList} from '../models/personbalizedList';
+import { List} from '../models/List';
 
 @Injectable({
   providedIn: 'root'
@@ -9,87 +8,69 @@ import { PersonalizedList} from '../models/personbalizedList';
 export class ContentService {
  
   toDoKeyLocalStorage = 'todos';
-  personalizedList = 'personalizedList';
+  listKeyLocalStorage = 'list';
 
   constructor() { }
 
-  getPersonalizedList(): Array<PersonalizedList>{
-    return this.getPersonalizedListFromLocalStorage();
+  getToDos(listId: number, done: boolean): Array<ToDo> {
+    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done === done && x.idList === listId);
   }
-  getAllTodosNotDone(listName: string): Array<ToDo> {
-    return this.getToDosFromLocalStorage().filter((x: ToDo) => !x.done && x.list === listName);
-  }
-
-  getAllTodosDone(listName: string): Array<ToDo> {
-    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done && x.list === listName);
-  }
-
-  insertPersonalizedList(list: PersonalizedList) {
-    const personalizedList = this.getPersonalizedListFromLocalStorage();
-    personalizedList.push(list);
-    this.setPersonalizedListToLocalStorage(personalizedList);    
-  }  
-
-  insert(todo: ToDo) {
+  
+  insertToDo(todo: ToDo) {
     const todos = this.getToDosFromLocalStorage();
     todo.id = todos.length + 1;
     todos.push(todo);
     this.setToDosToLocalStorage(todos);
-  }
+  }  
 
-  delete(id: number) {
+  deleteToDo(todoId: number) {
     let todos = this.getToDosFromLocalStorage();
-    todos = todos.filter((x: ToDo) => x.id !== id);
-    this.setToDosToLocalStorage(todos);
-  }
-
-  deletePersonalizedList(id: number) {
-    let personalizedList = this.getPersonalizedListFromLocalStorage();
-    personalizedList = personalizedList.filter((x: PersonalizedList) => x.id !== id);
-    this.setPersonalizedListToLocalStorage(personalizedList);
-  }
-
-  update(todo: ToDo) {
-    let todos = this.getToDosFromLocalStorage();
-    todos = todos.filter((x: ToDo) => x.id !== todo.id);
-    todos.push(todo);
-    this.setToDosToLocalStorage(todos);
-  }
-
-  markAsCompleted(todo: ToDo) {
-    const todos = this.getToDosFromLocalStorage();
-    todos.forEach((element: ToDo) => {
-      if (element.id === todo.id) {
-        element.done = true;
-      }
-    });
-
-    this.setToDosToLocalStorage(todos);
-  }
-
-  markAsNotCompleted(todo: ToDo) {
-    const todos = this.getToDosFromLocalStorage();
-    todos.forEach((element: ToDo) => {
-      if (element.id === todo.id) {
-        console.log(element);
-        element.done = false;
-      }
-    });
-
+    todos = todos.filter((x: ToDo) => x.id !== todoId);
     this.setToDosToLocalStorage(todos);
   }  
 
-  getPersonalizedListFromLocalStorage(){
-    const personalizedList = JSON.parse(localStorage.getItem(this.personalizedList));
-    return personalizedList || [];
+  updateToDo(todo: ToDo) {
+    let todos = this.getToDosFromLocalStorage();
+    todos.forEach((x: ToDo) => {
+      if(x.id === todo.id){
+        x.done = todo.done;
+        x.name = todo.name;
+        x.star = todo.star;
+      }
+    });
+
+    this.setToDosToLocalStorage(todos);
   }
 
-  setPersonalizedListToLocalStorage(personalizedList: PersonalizedList[]){
-    const newPersonalizedList = JSON.stringify(personalizedList);
-    localStorage.setItem(this.personalizedList, newPersonalizedList);
+  getPersonalizedList(): Array<List>{
+    return this.getListFromLocalStorage().filter( (x: List) => !x.defaul);
   }
 
-  getToDosFromLocalStorage() {
+  insertList(list: List) {
+    const newList = this.getListFromLocalStorage();
+    list.id = newList.length + 1;
+    list.defaul = false;
+    newList.push(list);
+    this.setListToLocalStorage(newList);    
+  }  
+
+  deleteList(listId: number) {
+    let newList = this.getListFromLocalStorage();
+    newList = newList.filter((x: List) => x.id !== listId);
+    this.setListToLocalStorage(newList);
+  }
+
+  getListFromLocalStorage(){
+    const list = JSON.parse(localStorage.getItem(this.listKeyLocalStorage));
+    return list || [];
+  }
+
+  setListToLocalStorage(list: List[]){
+    const newList = JSON.stringify(this.listKeyLocalStorage);
+    localStorage.setItem(this.listKeyLocalStorage, newList);
+  }
+
+  getToDosFromLocalStorage(): Array<ToDo> {
     const todos = JSON.parse(localStorage.getItem(this.toDoKeyLocalStorage));
     return todos || [];
   }

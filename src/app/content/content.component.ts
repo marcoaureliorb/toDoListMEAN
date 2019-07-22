@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { ToDo} from '../models/todo';
+import { List } from '../models/List';
 import { ContentService } from './content.service';
-import { PersonalizedList } from '../models/personbalizedList';
 
 @Component({
   selector: 'app-content',
@@ -17,8 +17,8 @@ export class ContentComponent implements OnInit {
   taskText: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
-  personalizedList: Array<PersonalizedList>;
-  listName: string;
+  personalizedList: Array<List>;
+  idlist: number;
 
   constructor(private formBuilder: FormBuilder, private contentService: ContentService) {
     this.checkoutForm = this.formBuilder.group({
@@ -29,13 +29,13 @@ export class ContentComponent implements OnInit {
       listName: ''
     });
 
-    this.listName = 'default';
+    this.idlist = 1;
     console.log('ContentComponent_constructor');
    }
 
   ngOnInit() {
-    this.todosDone = this.contentService.getAllTodosDone(this.listName);
-    this.todosNotDone = this.contentService.getAllTodosNotDone(this.listName);
+    this.todosDone = this.contentService.getToDos(this.idlist, true);
+    this.todosNotDone = this.contentService.getToDos(this.idlist, false);
     this.personalizedList = this.contentService.getPersonalizedList();
     console.log('ContentComponent_ngOnInit');
   }
@@ -60,34 +60,30 @@ export class ContentComponent implements OnInit {
     todo.done = true;
 
     this.todosDone.push(todo);
-
     this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
-
-    this.contentService.markAsCompleted(todo);
+    this.contentService.updateToDo(todo);
   }
 
   markAsNotCompleted(todo: ToDo){
     todo.done = false;
 
     this.todosNotDone.push(todo);
-
     this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
-
-    this.contentService.markAsNotCompleted(todo);    
+    this.contentService.updateToDo(todo);    
   }
 
   onAddPersonalizedList(personalizedListForm){
-      const newPersonalizedList = new PersonalizedList({id: this.personalizedList.length + 1, name: personalizedListForm.listName}); 
+      const newPersonalizedList = new List({name: personalizedListForm.listName}); 
       this.personalizedList.push(newPersonalizedList);
-      this.contentService.insertPersonalizedList(newPersonalizedList);
+      this.contentService.insertList(newPersonalizedList);
       this.personalizedListForm.reset();
   }
 
   onAddToDo(todoForm) {
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
-      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), list: this.listName, star: false});
+      const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), idList: this.idlist, star: false});
       this.todosNotDone.push(newTodo);
-      this.contentService.insert(newTodo);
+      this.contentService.insertToDo(newTodo);
       this.checkoutForm.reset();
     }
   }
@@ -100,12 +96,11 @@ export class ContentComponent implements OnInit {
       this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
     }
 
-    this.contentService.delete(todo.id);
+    this.contentService.deleteToDo(todo.id);
   }
 
-  deletePersonalizedList(list: PersonalizedList){
-    console.log(list);
+  deletePersonalizedList(list: List){
     this.personalizedList = this.personalizedList.filter(x => x.id !== list.id);
-    this.contentService.deletePersonalizedList(list.id);    
+    this.contentService.deleteList(list.id);    
   }
 }

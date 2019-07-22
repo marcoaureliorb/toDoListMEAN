@@ -2,7 +2,7 @@ export class ToDo {
 
     id: number;
     name: string;
-    list: string;
+    idList: number;
     dateCreate: Date;
     done: boolean;
     star: boolean;
