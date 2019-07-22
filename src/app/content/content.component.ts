@@ -37,6 +37,7 @@ export class ContentComponent implements OnInit {
     this.todosDone = this.contentService.getToDos(this.idlist, true);
     this.todosNotDone = this.contentService.getToDos(this.idlist, false);
     this.personalizedList = this.contentService.getPersonalizedList();
+    console.log(this.personalizedList);
     console.log('ContentComponent_ngOnInit');
   }
 
@@ -48,9 +49,9 @@ export class ContentComponent implements OnInit {
     return this.todosDone.length;
   }
 
-  changeStarState(todo: ToDo){
+  changeStarState(todo: ToDo) {
     this.todosNotDone.forEach(element => {
-      if(element.id == todo.id){
+      if (element.id === todo.id) {
         element.star = !element.star;
       }
     });
@@ -64,16 +65,16 @@ export class ContentComponent implements OnInit {
     this.contentService.updateToDo(todo);
   }
 
-  markAsNotCompleted(todo: ToDo){
+  markAsNotCompleted(todo: ToDo) {
     todo.done = false;
 
     this.todosNotDone.push(todo);
     this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
-    this.contentService.updateToDo(todo);    
+    this.contentService.updateToDo(todo);
   }
 
-  onAddPersonalizedList(personalizedListForm){
-      const newPersonalizedList = new List({name: personalizedListForm.listName}); 
+  onAddPersonalizedList(personalizedListForm) {
+      const newPersonalizedList = new List({name: personalizedListForm.listName});
       this.personalizedList.push(newPersonalizedList);
       this.contentService.insertList(newPersonalizedList);
       this.personalizedListForm.reset();
@@ -99,8 +100,8 @@ export class ContentComponent implements OnInit {
     this.contentService.deleteToDo(todo.id);
   }
 
-  deletePersonalizedList(list: List){
+  deletePersonalizedList(list: List) {
     this.personalizedList = this.personalizedList.filter(x => x.id !== list.id);
-    this.contentService.deleteList(list.id);    
+    this.contentService.deleteList(list.id);
   }
 }
