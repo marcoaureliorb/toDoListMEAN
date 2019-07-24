@@ -64,7 +64,7 @@ export class ContentService {
 
   getListFromLocalStorage(): Array<List> {
     const list = JSON.parse(localStorage.getItem(this.listKeyLocalStorage));
-    return list || [new List({name: 'Default', id: 1, defaul: true })];
+    return list || [new List({name: 'Task', id: 1, defaul: true })];
   }
 
   setListToLocalStorage(list: List[]) {

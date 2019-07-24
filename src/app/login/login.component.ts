@@ -24,9 +24,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.checkoutForm = this.formBuilder.group({
       user: ['marcoaureliorb@gmail.com', Validators.required],
-      password: ['marco123', Validators.required],
+      password: ['123', Validators.required],
       rememberMe: ''
-    });    
+    });
   }
 
   login(form) {

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { ToDo} from '../models/todo';
-import { List } from '../models/List';
 import { ContentService } from './content.service';
 import { DialogComponent } from '../shared/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,20 +14,14 @@ import { MatDialog } from '@angular/material/dialog';
 export class ContentComponent implements OnInit {
 
   checkoutForm;
-  personalizedListForm;
   taskText: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
-  personalizedList: Array<List>;
   idlist: number;
 
   constructor(private formBuilder: FormBuilder, private contentService: ContentService, public dialog: MatDialog) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
-    });
-
-    this.personalizedListForm = this.formBuilder.group({
-      listName: ''
     });
 
     this.idlist = 1;
@@ -38,9 +31,6 @@ export class ContentComponent implements OnInit {
   ngOnInit() {
     this.todosDone = this.contentService.getToDos(this.idlist, true);
     this.todosNotDone = this.contentService.getToDos(this.idlist, false);
-    this.personalizedList = this.contentService.getPersonalizedList();
-    console.log(this.personalizedList);
-    console.log('ContentComponent_ngOnInit');
   }
 
   getTotalToDoNotDone(): number {
@@ -52,9 +42,17 @@ export class ContentComponent implements OnInit {
   }
 
   changeStarState(todo: ToDo) {
-    this.todosNotDone.forEach(element => {
+
+    let listTemp = this.todosDone;
+
+    if (!todo.done){
+      listTemp = this.todosNotDone;
+    }
+
+    listTemp.forEach(element => {
       if (element.id === todo.id) {
         element.star = !element.star;
+        this.contentService.updateToDo(todo);
       }
     });
   }
@@ -75,13 +73,6 @@ export class ContentComponent implements OnInit {
     this.contentService.updateToDo(todo);
   }
 
-  onAddPersonalizedList(personalizedListForm) {
-      const newPersonalizedList = new List({name: personalizedListForm.listName});
-      this.personalizedList.push(newPersonalizedList);
-      this.contentService.insertList(newPersonalizedList);
-      this.personalizedListForm.reset();
-  }
-
   onAddToDo(todoForm) {
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
       const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), idList: this.idlist, star: false});
@@ -94,7 +85,6 @@ export class ContentComponent implements OnInit {
   deleteToDo(todo: ToDo) {
 
     const dialogRef = this.dialog.open(DialogComponent, {
-      //width: '250px',
       data: {message: 'Are you sure you want to permanently delete this todo?'}
     });
 
@@ -110,10 +100,5 @@ export class ContentComponent implements OnInit {
         this.contentService.deleteToDo(todo.id);
       }
     });
-  }
-
-  deletePersonalizedList(list: List) {
-    this.personalizedList = this.personalizedList.filter(x => x.id !== list.id);
-    this.contentService.deleteList(list.id);
   }
 }

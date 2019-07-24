@@ -15,6 +15,8 @@ import { AuthenticationService  } from 'AuthenticationService';
 import { authenticationGard } from 'authenticationGuard';
 import { RegisterComponent } from './register/register.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
+import { MainComponent } from './main/main.component';
+import { MenuLeftComponent } from './menu-left/menu-left.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { DialogComponent } from './shared/dialog/dialog.component';
     LoginComponent,
     FooterComponent,
     RegisterComponent,
-    DialogComponent
+    DialogComponent,
+    MainComponent,
+    MenuLeftComponent
   ],
   imports: [
     BrowserModule,
