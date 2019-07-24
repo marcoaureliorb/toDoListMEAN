@@ -94,8 +94,8 @@ export class ContentComponent implements OnInit {
   deleteToDo(todo: ToDo) {
 
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '250px',
-      data: {message: 'Do you delete this todo?' , title: 'Confirm' }
+      //width: '250px',
+      data: {message: 'Are you sure you want to permanently delete this todo?'}
     });
 
     dialogRef.afterClosed().subscribe(result => {

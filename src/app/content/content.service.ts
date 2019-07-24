@@ -19,6 +19,8 @@ export class ContentService {
   insertToDo(todo: ToDo) {
     const todos = this.getToDosFromLocalStorage();
     todo.id = todos.length + 1;
+    todo.done = todo.done || false;
+    todo.star = todo.star || false;
     todos.push(todo);
     this.setToDosToLocalStorage(todos);
   }

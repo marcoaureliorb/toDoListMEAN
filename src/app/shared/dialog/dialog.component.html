@@ -1,18 +1,13 @@
-<!--
-<h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content>
-  <p>{{data.message}}</p>
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false" (click)="onNoClick()">No</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Yes</button>
-</div>
--->
-<div>
-  <div class="content-container">
-    <mat-icon id="close-icon" (click)="onNoClick()">close</mat-icon>
-    <span class="content-span full-width">{{data.message}}</span>
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title"><i class="fa fa-list-ol" aria-hidden="true"></i> To-Do</h5>
+    <button type="button" class="close" (click)="onNoClick()"><span aria-hidden="true">&times;</span></button>
   </div>
-  <button mat-flat-button id="no-button" [mat-dialog-close]="false" (click)="onNoClick()">NO</button>
-  <button mat-flat-button id="yes-button" [mat-dialog-close]="true">YES</button>
+  <div class="modal-body">
+    <p>{{data.message}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" [mat-dialog-close]="false" cdkFocusInitial (click)="onNoClick()">No</button>
+    <button type="button" class="btn btn-outline-secondary" [mat-dialog-close]="true">Yes</button>
+  </div>
 </div>

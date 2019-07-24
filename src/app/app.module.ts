@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule, MatButtonModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,9 +31,10 @@ import { DialogComponent } from './shared/dialog/dialog.component';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatDialogModule,    
+    MatIconModule,
+    MatButtonModule
   ],
   entryComponents: [DialogComponent],
   providers: [AuthenticationService , authenticationGard],
