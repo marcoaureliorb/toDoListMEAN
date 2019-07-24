@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { ToDo} from '../models/todo';
-import { ContentService } from './content.service';
+import { MainService } from '../main/main.service';
 import { DialogComponent } from '../shared/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -19,7 +19,7 @@ export class ContentComponent implements OnInit {
   todosNotDone: Array<ToDo>;
   idlist: number;
 
-  constructor(private formBuilder: FormBuilder, private contentService: ContentService, public dialog: MatDialog) {
+  constructor(private formBuilder: FormBuilder, private mainService: MainService, public dialog: MatDialog) {
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
     });
@@ -29,8 +29,8 @@ export class ContentComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.todosDone = this.contentService.getToDos(this.idlist, true);
-    this.todosNotDone = this.contentService.getToDos(this.idlist, false);
+    this.todosDone = this.mainService.getToDos(this.idlist, true);
+    this.todosNotDone = this.mainService.getToDos(this.idlist, false);
   }
 
   getTotalToDoNotDone(): number {
@@ -52,7 +52,7 @@ export class ContentComponent implements OnInit {
     listTemp.forEach(element => {
       if (element.id === todo.id) {
         element.star = !element.star;
-        this.contentService.updateToDo(todo);
+        this.mainService.updateToDo(todo);
       }
     });
   }
@@ -62,7 +62,7 @@ export class ContentComponent implements OnInit {
 
     this.todosDone.push(todo);
     this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
-    this.contentService.updateToDo(todo);
+    this.mainService.updateToDo(todo);
   }
 
   markAsNotCompleted(todo: ToDo) {
@@ -70,14 +70,14 @@ export class ContentComponent implements OnInit {
 
     this.todosNotDone.push(todo);
     this.todosDone = this.todosDone.filter(x => x.id !== todo.id);
-    this.contentService.updateToDo(todo);
+    this.mainService.updateToDo(todo);
   }
 
   onAddToDo(todoForm) {
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
       const newTodo = new ToDo({id: 0, name: todoForm.todoName, dateCreate: new Date(), idList: this.idlist, star: false});
       this.todosNotDone.push(newTodo);
-      this.contentService.insertToDo(newTodo);
+      this.mainService.insertToDo(newTodo);
       this.checkoutForm.reset();
     }
   }
@@ -97,7 +97,7 @@ export class ContentComponent implements OnInit {
         this.todosNotDone = this.todosNotDone.filter(x => x.id !== todo.id);
         }
 
-        this.contentService.deleteToDo(todo.id);
+        this.mainService.deleteToDo(todo.id);
       }
     });
   }

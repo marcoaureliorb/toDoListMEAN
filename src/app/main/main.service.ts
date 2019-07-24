@@ -5,7 +5,7 @@ import { List} from '../models/List';
 @Injectable({
   providedIn: 'root'
 })
-export class ContentService {
+export class MainService {
 
   toDoKeyLocalStorage = 'todos';
   listKeyLocalStorage = 'list';
