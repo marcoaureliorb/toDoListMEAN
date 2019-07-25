@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToDo} from '../models/todo';
 import { List} from '../models/List';
-import { Subject }    from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class MainService {
 
   toDoKeyLocalStorage = 'todos';
   listKeyLocalStorage = 'list';
-  
+
   private listSelectedSource = new Subject<number>();
 
   listSelected = this.listSelectedSource.asObservable();
@@ -19,7 +19,7 @@ export class MainService {
 
   onListSelected(idList: number) {
     this.listSelectedSource.next(idList);
-  }  
+  }
 
   getAllToDo(listId: number): Array<ToDo> {
     return this.getToDosFromLocalStorage().filter((x: ToDo) => x.idList === listId);
@@ -29,13 +29,13 @@ export class MainService {
     const lists = this.getListFromLocalStorage();
     let list = null;
     lists.forEach(element => {
-      if (element.id === listId){
+      if (element.id === listId) {
         list = element;
       }
     });
 
     return list;
-  }  
+  }
 
   insertToDo(todo: ToDo) {
     const todos = this.getToDosFromLocalStorage();
@@ -81,6 +81,13 @@ export class MainService {
     let newList = this.getListFromLocalStorage();
     newList = newList.filter((x: List) => x.id !== listId);
     this.setListToLocalStorage(newList);
+    this.deleteToDoFromList(listId);
+  }
+
+  deleteToDoFromList(listId: number){
+    let todos = this.getToDosFromLocalStorage();
+    todos = todos.filter((x: ToDo) => x.idList !== listId);
+    this.setToDosToLocalStorage(todos);
   }
 
   getListFromLocalStorage(): Array<List> {

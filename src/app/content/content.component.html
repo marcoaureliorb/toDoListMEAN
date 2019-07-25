@@ -19,7 +19,7 @@
   <div>
     <div class="row">
       <div class="col">
-        <h6>Task toDo <span class="badge badge-light text-secondary">{{getTotalToDo()}}</span></h6>
+        <h6>Task toDo <span class="badge badge-info">{{getTotalToDo()}}</span></h6>
       </div>
     </div>
     <div class="row" *ngFor="let todo of todos">
@@ -28,16 +28,16 @@
         <div class="input-group">
           <div class="input-group-prepend">
             <button type="button" class="btn btn-outline-secondary" (click)="changeCompleteState(todo)">
-              <i [ngClass]="(todo.done)?'fa fa-check-circle':'fa fa-circle-o'"></i>
+              <i class="text-success" [ngClass]="(todo.done)?'fa fa-check-circle':'fa fa-circle-o'"></i>
             </button>
           </div>
           <input type="text" [ngClass]="(todo.done)?'todoDone':''" class="form-control bg-transparent" disabled value="{{todo.name}}">
           <div class="input-group-append">
             <button type="button" class="btn btn-outline-secondary" (click)="changeStarState(todo)">
-              <i [ngClass]="(todo.star)?'fa fa-star':'fa fa-star-o'"></i>
+              <i class="text-warning" [ngClass]="(todo.star)?'fa fa-star':'fa fa-star-o'"></i>
             </button>
             <button type="button" class="btn btn-outline-secondary" (click)="deleteToDo(todo)">
-              <i class="fa fa-trash-o"></i>
+              <i class="text-danger fa fa-trash-o"></i>
             </button>
           </div>
         </div>

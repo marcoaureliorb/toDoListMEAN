@@ -6,6 +6,9 @@
       <div class="col">
         Tasks
       </div>
+      <div class="col-1">
+          <span class="badge badge-info">6</span>
+      </div>      
     </div>
     <div class="row hover-cursor" (click)="onListSelected(2)">
         <div class="col-1">
@@ -14,6 +17,9 @@
         <div class="col">
             Starred
         </div>
+        <div class="col-1">
+            <span class="badge badge-info">6</span>
+        </div>        
       </div>    
 </ul>
 <hr>
@@ -29,7 +35,10 @@
       {{list.name}}
     </div>
     <div class="col-1">
-      <i class="fa fa-trash-o" (click)="deletePersonalizedList(list)"></i>
+        <span class="badge badge-info">6</span>
+    </div>
+    <div class="col-1">
+      <i class="text-danger fa fa-trash-o" (click)="deletePersonalizedList(list)"></i>
     </div>
   </div>
 </ul>

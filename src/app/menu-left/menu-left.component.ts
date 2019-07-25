@@ -31,15 +31,17 @@ export class MenuLeftComponent implements OnInit {
   }
 
   onAddPersonalizedList(personalizedListForm) {
-    const newPersonalizedList = new List({name: personalizedListForm.listName});
-    this.personalizedList.push(newPersonalizedList);
-    this.mainService.insertList(newPersonalizedList);
-    this.personalizedListForm.reset();
+    if (!(personalizedListForm.listName === null || personalizedListForm.listName === '')) {
+      const newPersonalizedList = new List({name: personalizedListForm.listName});
+      this.personalizedList.push(newPersonalizedList);
+      this.mainService.insertList(newPersonalizedList);
+      this.personalizedListForm.reset();
+    }
   }
 
   onListSelected(idListSelected: number) {
     this.mainService.onListSelected(idListSelected);
-  }  
+  }
 
   deletePersonalizedList(list: List) {
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -50,6 +52,7 @@ export class MenuLeftComponent implements OnInit {
       if (result !== undefined && result) {
         this.personalizedList = this.personalizedList.filter(x => x.id !== list.id);
         this.mainService.deleteList(list.id);
+        this.mainService.onListSelected(1);
       }
     });
   }
