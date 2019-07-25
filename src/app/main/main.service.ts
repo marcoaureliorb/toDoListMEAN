@@ -21,8 +21,8 @@ export class MainService {
     this.listSelectedSource.next(idList);
   }  
 
-  getToDos(listId: number, done: boolean): Array<ToDo> {
-    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done === done && x.idList === listId);
+  getAllToDo(listId: number): Array<ToDo> {
+    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.idList === listId);
   }
 
   getList(listId: number): List {

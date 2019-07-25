@@ -5,3 +5,7 @@ span button{
 .row {
     margin-top: 5px;
   }
+
+  .todoDone{
+    text-decoration: line-through;
+  }

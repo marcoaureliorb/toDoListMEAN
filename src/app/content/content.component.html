@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col">
           <div class="input-group mb-3">
-            <input type="text" id="todoName" formControlName="todoName" class="form-control" placeholder="Add new todo">
+            <input type="text" id="todoName" formControlName="todoName" class="form-control" placeholder="add new todo">
             <div class="input-group-append">
               <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-plus"></i>
               </button>
@@ -16,53 +16,33 @@
     </form>
   </div>
 
-  <div class="todoNotDone">
+  <div>
     <div class="row">
       <div class="col">
-        <h6>Task toDo <span class="badge badge-light text-secondary">{{getTotalToDoNotDone()}}</span></h6>
+        <h6>Task toDo <span class="badge badge-light text-secondary">{{getTotalToDo()}}</span></h6>
       </div>
     </div>
-    <div class="row" *ngFor="let todo of todosNotDone">
+    <div class="row" *ngFor="let todo of todos">
+
       <div class="col">
         <div class="input-group">
           <div class="input-group-prepend">
-            <button type="button" class="btn btn-outline-secondary" (click)="markAsCompleted(todo)"><i
-                class="fa fa-circle-o"></i></button>
+            <button type="button" class="btn btn-outline-secondary" (click)="changeCompleteState(todo)">
+              <i [ngClass]="(todo.done)?'fa fa-check-circle':'fa fa-circle-o'"></i>
+            </button>
           </div>
-          <input type="text" class="form-control bg-transparent" disabled value="{{todo.name}}">
+          <input type="text" [ngClass]="(todo.done)?'todoDone':''" class="form-control bg-transparent" disabled value="{{todo.name}}">
           <div class="input-group-append">
-            <button type="button" class="btn btn-outline-secondary" (click)="changeStarState(todo)"><i
-                [ngClass]="(todo.star)?'fa fa-star':'fa fa-star-o'"></i></button>
-            <button type="button" class="btn btn-outline-secondary" (click)="deleteToDo(todo)"><i
-                class="fa fa-trash-o"></i></button>
+            <button type="button" class="btn btn-outline-secondary" (click)="changeStarState(todo)">
+              <i [ngClass]="(todo.star)?'fa fa-star':'fa fa-star-o'"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="deleteToDo(todo)">
+              <i class="fa fa-trash-o"></i>
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <br>
-  <div class="todoDone">
-    <div class="row">
-      <div class="col">
-        <h6>Completed Task <span class="badge badge-light text-secondary">{{getTotalToDoDone()}}</span></h6>
-      </div>
-    </div>
-    <div class="row" *ngFor="let todoDone of todosDone">
-      <div class="col">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <button type="button" class="btn btn-outline-secondary" (click)="markAsNotCompleted(todoDone)"><i
-                class="fa fa-check-circle"></i></button>
-          </div>
-          <input type="text" class="form-control bg-transparent" disabled value="{{todoDone.name}}">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-outline-secondary" (click)="changeStarState(todoDone)"><i
-                [ngClass]="(todoDone.star)?'fa fa-star':'fa fa-star-o'"></i></button>
-            <button type="button" class="btn btn-outline-secondary" (click)="deleteToDo(todoDone)"><i
-                class="fa fa-trash-o"></i></button>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>

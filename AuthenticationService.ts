@@ -22,7 +22,7 @@ export class AuthenticationService {
   
       if(usuario.length > 0){
           this.currentUser = usuario[0];
-          this.loginSource.next(this.currentUser);
+          this.loginSource.observers.forEach(x => x.next(this.currentUser));
           return true;
       }
 
