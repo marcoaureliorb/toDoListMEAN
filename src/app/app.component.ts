@@ -1,4 +1,5 @@
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit, OnDestroy  } from '@angular/core';
+import { Subscription }   from 'rxjs';
 import { AuthenticationService } from 'AuthenticationService';
 
 @Component({
@@ -7,18 +8,24 @@ import { AuthenticationService } from 'AuthenticationService';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   isShow: boolean;
-
+  subscription: Subscription;
   title = 'toDoList';
 
-  constructor(private authenticatorService: AuthenticationService){
-    
+  constructor(private authenticatorService: AuthenticationService ){
+    this.subscription = authenticatorService.loginObservable.subscribe(
+      user => {
+        this.isShow = user !== undefined;
+    });     
   }
 
   ngOnInit() {
     this.isShow = this.authenticatorService.isAuthenticated();
-    console.log(this.isShow);
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }   
 }

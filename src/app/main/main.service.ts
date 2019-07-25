@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToDo} from '../models/todo';
 import { List} from '../models/List';
+import { Subject }    from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +10,32 @@ export class MainService {
 
   toDoKeyLocalStorage = 'todos';
   listKeyLocalStorage = 'list';
+  
+  private listSelectedSource = new Subject<number>();
+
+  listSelected = this.listSelectedSource.asObservable();
 
   constructor() { }
+
+  onListSelected(idList: number) {
+    this.listSelectedSource.next(idList);
+  }  
 
   getToDos(listId: number, done: boolean): Array<ToDo> {
     return this.getToDosFromLocalStorage().filter((x: ToDo) => x.done === done && x.idList === listId);
   }
+
+  getList(listId: number): List {
+    const lists = this.getListFromLocalStorage();
+    let list = null;
+    lists.forEach(element => {
+      if (element.id === listId){
+        list = element;
+      }
+    });
+
+    return list;
+  }  
 
   insertToDo(todo: ToDo) {
     const todos = this.getToDosFromLocalStorage();

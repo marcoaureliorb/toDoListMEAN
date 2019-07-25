@@ -15,7 +15,7 @@
   <div class=col></div>
 </div>
 <ul class="list-group">
-  <div class="row hover-cursor" *ngFor="let list of personalizedList">
+  <div class="row hover-cursor" (click)="onListSelected(list.id)" *ngFor="let list of personalizedList">
     <div class="col-1">
       <i class="fa fa-tasks" aria-hidden="true"></i>
     </div>

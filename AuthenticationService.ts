@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/app/models/user';
-import { Observable } from 'rxjs';
+import { Subject }    from 'rxjs';
 
 @Injectable()
 export class AuthenticationService {
     
     public currentUser: User = null;
     userDatabase = 'users';
+
+    private loginSource = new Subject<User>();
+    loginObservable = this.loginSource.asObservable();    
   
     constructor() {
      }
 
-    login(user: string, pass: string){
+     login(user: string, pass: string){
   
       var users = this.getUsersFromLocalStorage();
   
@@ -19,6 +22,7 @@ export class AuthenticationService {
   
       if(usuario.length > 0){
           this.currentUser = usuario[0];
+          this.loginSource.next(this.currentUser);
           return true;
       }
 

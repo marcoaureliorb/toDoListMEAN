@@ -37,6 +37,10 @@ export class MenuLeftComponent implements OnInit {
     this.personalizedListForm.reset();
   }
 
+  onListSelected(idListSelected: number) {
+    this.mainService.onListSelected(idListSelected);
+  }  
+
   deletePersonalizedList(list: List) {
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {message: 'Are you sure you want to permanently delete this list?'}

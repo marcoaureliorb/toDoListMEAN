@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Subscription }   from 'rxjs';
 
 import { ToDo} from '../models/todo';
 import { MainService } from '../main/main.service';
@@ -11,27 +12,43 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.css']
 })
-export class ContentComponent implements OnInit {
+export class ContentComponent implements OnInit, OnDestroy {
 
   checkoutForm;
   taskText: string;
   todosDone: Array<ToDo>;
   todosNotDone: Array<ToDo>;
   idlist: number;
+  subscription: Subscription;
 
   constructor(private formBuilder: FormBuilder, private mainService: MainService, public dialog: MatDialog) {
+    
+    this.subscription = mainService.listSelected.subscribe(
+      idListSelected => {
+        this.idlist = idListSelected;
+        this.todosDone = this.mainService.getToDos(this.idlist, true);
+        this.todosNotDone = this.mainService.getToDos(this.idlist, false);
+        let task = this.mainService.getList(this.idlist);
+        this.taskText = task.name;
+    });
+
     this.checkoutForm = this.formBuilder.group({
       todoName: ''
     });
 
     this.idlist = 1;
-    console.log('ContentComponent_constructor');
    }
 
   ngOnInit() {
     this.todosDone = this.mainService.getToDos(this.idlist, true);
     this.todosNotDone = this.mainService.getToDos(this.idlist, false);
+    let task = this.mainService.getList(this.idlist);
+    this.taskText = task.name;    
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }  
 
   getTotalToDoNotDone(): number {
     return this.todosNotDone.length;
