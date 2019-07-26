@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   isValid = true;
   errMsg = '';
   loading = false;
+  submitted = false;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private authenticationService: AuthenticationService ) {
     if (this.authenticationService.currentUserValue) {
@@ -25,14 +26,20 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.checkoutForm = this.formBuilder.group({
-      email: ['marcoaureliorb@gmail.com', Validators.required],
-      password: ['123', Validators.required],
-      rememberMe: ''
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      rememberMe: false
     });
   }
 
+  get f() { return this.checkoutForm.controls; }
+
   login(form) {
+      this.submitted = true;
+
       if (this.checkoutForm.invalid) {
+        console.log(this.f.email.errors);
+        console.log(this.f.email.errors.required);
         return;
       }
 
