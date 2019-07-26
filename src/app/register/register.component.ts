@@ -11,12 +11,12 @@ import { User } from '../models/user';
 })
 export class RegisterComponent implements OnInit {
 
-  fg : FormGroup;
+  fg: FormGroup;
   isValid = true;
   errMsg = '';
   registerOk = false;
 
-  constructor(private formBuilder : FormBuilder, private router: Router, private userService : UserService) { }
+  constructor(private formBuilder: FormBuilder, private router: Router, private userService: UserService) { }
 
   ngOnInit() {
     this.fg = this.formBuilder.group({
@@ -24,18 +24,17 @@ export class RegisterComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required]
-    }); 
+    });
   }
 
-  register(form){
+  register(form) {
     const {firstName, lastName, email, password}  = form;
 
-    try{
+    try {
       const user = new User({firstName, lastName, email, password});
       this.userService.register(user);
       this.registerOk = true;
-    }
-    catch(e){
+    } catch (e) {
       this.isValid = false;
       this.errMsg = e;
     }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/app/models/user';
-import { Subject }    from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,7 +9,7 @@ export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
     currentUserLocalStorage = 'currentUser';
-    
+
     constructor(private http: HttpClient) {
       this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
       this.currentUser = this.currentUserSubject.asObservable();
@@ -24,7 +23,7 @@ export class AuthenticationService {
                                 localStorage.setItem(this.currentUserLocalStorage, JSON.stringify(user));
                                 this.currentUserSubject.next(user);
                               }
-                              
+
                               return user;
                             }));
     }
@@ -32,13 +31,13 @@ export class AuthenticationService {
     logout() {
       localStorage.removeItem(this.currentUserLocalStorage);
       this.currentUserSubject.next(null);
-    }    
+    }
 
     public get currentUserValue(): User {
       return this.currentUserSubject.value;
-    }    
+    }
 
     isAuthenticated() {
       return this.currentUser != null;
-    }    
+    }
 }

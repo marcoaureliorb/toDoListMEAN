@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Subscription }   from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { ToDo} from '../models/todo';
 import { MainService } from '../_services/main.service';
@@ -21,12 +21,12 @@ export class ContentComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(private formBuilder: FormBuilder, private mainService: MainService, public dialog: MatDialog) {
-    
+
     this.subscription = mainService.listSelected.subscribe(
       idListSelected => {
         this.idlist = idListSelected;
         this.todos = this.mainService.getAllToDo(this.idlist);
-        let task = this.mainService.getList(this.idlist);
+        const task = this.mainService.getList(this.idlist);
         this.taskText = task.name;
     });
 
@@ -39,13 +39,13 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.todos = this.mainService.getAllToDo(this.idlist);
-    let task = this.mainService.getList(this.idlist);
-    this.taskText = task.name;    
+    const task = this.mainService.getList(this.idlist);
+    this.taskText = task.name;
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }  
+  }
 
   getTotalToDo(): number {
     return this.todos.filter((x: ToDo) => !x.done).length;

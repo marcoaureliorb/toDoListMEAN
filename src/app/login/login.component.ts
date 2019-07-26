@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   errMsg = '';
   loading = false;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authenticationService : AuthenticationService ) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private authenticationService: AuthenticationService ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['main']);
     }

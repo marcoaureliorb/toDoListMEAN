@@ -13,7 +13,7 @@ import { ContentComponent } from './content/content.component';
 import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { AuthenticationService  } from 'src/app/_services/AuthenticationService';
-import { authenticationGard } from 'src/app/_guards/authenticationGuard';
+import { AuthenticationGard } from 'src/app/_guards/authenticationGuard';
 import { RegisterComponent } from './register/register.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
 import { MainComponent } from './main/main.component';
@@ -39,15 +39,15 @@ import { FakeBackendInterceptor } from './_helpers/fakeBackendInterceptor';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatDialogModule,    
+    MatDialogModule,
     MatIconModule,
     MatButtonModule
   ],
   entryComponents: [DialogComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
-    AuthenticationService, 
-    authenticationGard
+    AuthenticationService,
+    AuthenticationGard
   ],
   bootstrap: [AppComponent]
 })

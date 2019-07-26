@@ -84,7 +84,7 @@ export class MainService {
     this.deleteToDoFromList(listId);
   }
 
-  deleteToDoFromList(listId: number){
+  deleteToDoFromList(listId: number) {
     let todos = this.getToDosFromLocalStorage();
     todos = todos.filter((x: ToDo) => x.idList !== listId);
     this.setToDosToLocalStorage(todos);

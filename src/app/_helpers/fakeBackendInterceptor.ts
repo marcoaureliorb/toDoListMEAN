@@ -7,7 +7,7 @@ import { User } from '../models/user';
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        
+
         const { url, method, headers, body } = request;
         const userDatabase = 'users';
 
@@ -22,50 +22,50 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 case url.endsWith('/users/register') && method === 'POST':
                     return register();
                 case url.endsWith('/users/authenticate') && method === 'POST':
-                    return authenticate();                    
+                    return authenticate();
                 default:
                     return next.handle(request);
-            }    
+            }
         }
 
         function register() {
             const {firstName, lastName, email, password} = body;
-            var users = getUsersFromLocalStorage();
+            const users = getUsersFromLocalStorage();
 
             if (users.find((x : User) => x.email === email)) {
-                return error('email "' + email + '" is already taken')
+                return error('email "' + email + '" is already taken');
             }
 
-            let user = new User({firstName, lastName, email, password});
+            const user = new User({firstName, lastName, email, password});
             user.id = users.length + 1;
             users.push(user);
 
             setUsersToLocalStorage(users);
             return ok();
-        }        
+        }
 
         function authenticate() {
             const { email, password } = body;
 
-            var users = getUsersFromLocalStorage();
-            var usuario = users.filter((x : User) => x.email == email && x.password == password);
-            
-            console.log(users);
+            const users = getUsersFromLocalStorage();
+            const  usuario = users.filter((x: User) => x.email === email && x.password === password);
 
-            if(!usuario || usuario.length == 0) return error('Email or password is incorrect');
-            
-            if(usuario.length > 0){
+            if (!usuario || usuario.length === 0) {
+                return error('Email or password is incorrect');
+            }
+
+            if (usuario.length > 0) {
                 return ok({
                     id: usuario[0].id,
                     firstName: usuario[0].firstName,
                     lastName: usuario[0].lastName,
                     email: usuario[0].email
                 });
-            }            
+            }
         }
 
         function ok(body?) {
-            return of(new HttpResponse({ status: 200, body }))
+            return of(new HttpResponse({ status: 200, body }));
         }
 
         function error(message) {
@@ -75,11 +75,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function getUsersFromLocalStorage(): Array<User> {
             const users  = JSON.parse(localStorage.getItem(userDatabase));
             return users || [];
-          }  
-      
+          }
+
         function  setUsersToLocalStorage(users: Array<User>) {
             const newUsers  = JSON.stringify(users);
             localStorage.setItem(userDatabase, newUsers);
-          }         
+          }
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy  } from '@angular/core';
-import { Subscription }   from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services/AuthenticationService';
 
 @Component({
@@ -14,8 +14,8 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   title = 'toDoList';
 
-  constructor(private authenticatorService: AuthenticationService ){
-    this.authenticatorService.currentUser.subscribe(x => this.isShow = x != null);    
+  constructor(private authenticatorService: AuthenticationService ) {
+    this.authenticatorService.currentUser.subscribe(x => this.isShow = x != null);
   }
 
   ngOnInit() {
@@ -24,5 +24,5 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }   
+  }
 }
