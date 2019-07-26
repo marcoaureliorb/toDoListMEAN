@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'AuthenticationService';
 import { Router } from '@angular/router';
+import { UserService } from '../_services/user.service';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,7 @@ export class RegisterComponent implements OnInit {
   errMsg = '';
   registerOk = false;
 
-  constructor(private formBuilder : FormBuilder, private router: Router, private authenticationService : AuthenticationService) { }
+  constructor(private formBuilder : FormBuilder, private router: Router, private userService : UserService) { }
 
   ngOnInit() {
     this.fg = this.formBuilder.group({
@@ -27,13 +28,11 @@ export class RegisterComponent implements OnInit {
   }
 
   register(form){
-    const firstName = form.firstName;
-    const lastName = form.lastName;
-    const email = form.email;
-    const password = form.password;        
+    const {firstName, lastName, email, password}  = form;
 
     try{
-      this.authenticationService.register(firstName, lastName, email, password);
+      const user = new User({firstName, lastName, email, password});
+      this.userService.register(user);
       this.registerOk = true;
     }
     catch(e){

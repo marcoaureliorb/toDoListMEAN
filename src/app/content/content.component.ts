@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Subscription }   from 'rxjs';
 
 import { ToDo} from '../models/todo';
-import { MainService } from '../main/main.service';
+import { MainService } from '../_services/main.service';
 import { DialogComponent } from '../shared/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 

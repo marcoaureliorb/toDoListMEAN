@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy  } from '@angular/core';
 import { Subscription }   from 'rxjs';
-import { AuthenticationService } from 'AuthenticationService';
+import { AuthenticationService } from 'src/app/_services/AuthenticationService';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +15,11 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'toDoList';
 
   constructor(private authenticatorService: AuthenticationService ){
-    this.subscription = authenticatorService.loginObservable.subscribe(
-      user => {
-        this.isShow = user !== undefined;
-    });     
+    this.authenticatorService.currentUser.subscribe(x => this.isShow = x != null);    
   }
 
   ngOnInit() {
-    this.isShow = this.authenticatorService.isAuthenticated();
+    this.isShow = this.authenticatorService.currentUserValue != null;
   }
 
   ngOnDestroy() {
