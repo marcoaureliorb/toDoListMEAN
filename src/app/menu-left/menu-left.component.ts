@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { List } from '../models/List';
-import { MainService } from '../_services/main.service';
-import { DialogComponent } from '../shared/dialog/dialog.component';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { List } from '../models/List';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 import { AuthenticationService } from '../_services/AuthenticationService';
+import { MainService } from '../_services/main.service';
 
 @Component({
   selector: 'app-menu-left',
@@ -15,58 +15,72 @@ export class MenuLeftComponent implements OnInit {
 
   defaultList: Array<List>;
   personalizedList: Array<List>;
-  personalizedListForm;
-  idlist: number;
+  fbListForm;
+  taskList: List;
 
-  constructor(private formBuilder: FormBuilder, 
-              private mainService: MainService, 
+  constructor(private formBuilder: FormBuilder,
+              private mainService: MainService,
               private authenticationService: AuthenticationService,
               public dialog: MatDialog) {
 
-    this.personalizedListForm = this.formBuilder.group({
-      listName: ''
+    this.fbListForm = this.formBuilder.group({
+      Name: new FormControl(null, Validators.required)
     });
-
-    this.idlist = 1;
   }
 
   ngOnInit() {
     this.mainService
-      .getLists(this.authenticationService.currentUserValue.id, true)
-      .subscribe(x => this.defaultList = x);
-
-    this.mainService
       .getLists(this.authenticationService.currentUserValue.id, false)
       .subscribe(x => this.personalizedList = x);
+
+    this.mainService
+      .getLists(this.authenticationService.currentUserValue.id, true)
+      .subscribe(lists => {
+        this.defaultList = lists;
+        this.taskList = lists.filter((x: List) => x.id === 1)[0];
+      });
   }
 
-  onAddPersonalizedList(personalizedListForm) {
-    if (!(personalizedListForm.listName === null || personalizedListForm.listName === '')) {
+  onAddPersonalizedList(newList) {
 
-      const newPersonalizedList = new List({name: personalizedListForm.listName});
-      this.personalizedList.push(newPersonalizedList);
-
-      this.mainService
-        .insertList(newPersonalizedList)
-        .subscribe(x => this.personalizedListForm.reset());
+    if (this.fbListForm.invalid) {
+      return;
     }
+
+    const list =
+      new List({
+        name: newList.Name,
+        defaul: false,
+        idUser: this.authenticationService.currentUserValue.id
+      });
+
+    this.mainService
+      .insertList(list)
+      .subscribe(x => {
+        list.id = x;
+        this.personalizedList.push(list);
+        this.fbListForm.reset();
+      });
   }
 
   onListSelected(list: List) {
-    list.id = list.id || this.authenticationService.currentUserValue.id;
-    list.defaul = list.defaul || (list.id === 1 || list.id === 2);
     this.mainService.onListSelected(list);
   }
 
   deletePersonalizedList(list: List) {
     const dialogRef = this.dialog.open(DialogComponent, {
-      data: {message: 'Are you sure you want to permanently delete this list?'}
+      data: { message: 'Are you sure you want to permanently delete this list?' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined && result) {
-        this.personalizedList = this.personalizedList.filter(x => x.id !== list.id);
-        this.mainService.deleteList(list.id).subscribe(x => this.mainService.onListSelected(new List({id: 1})));
+
+        this.mainService
+          .deleteList(list.id)
+          .subscribe(idList => {
+            this.personalizedList = this.personalizedList.filter(x => x.id !== idList);
+            this.mainService.onListSelected(this.taskList);
+          });
       }
     });
   }

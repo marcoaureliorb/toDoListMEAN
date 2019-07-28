@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Subscription } from 'rxjs';
-
-import { ToDo} from '../models/todo';
-import { MainService } from '../_services/main.service';
-import { DialogComponent } from '../shared/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthenticationService } from '../_services/AuthenticationService';
+import { Subscription } from 'rxjs';
 import { List } from '../models/List';
+import { ToDo } from '../models/todo';
+import { DialogComponent } from '../shared/dialog/dialog.component';
+import { AuthenticationService } from '../_services/AuthenticationService';
+import { MainService } from '../_services/main.service';
+
 
 @Component({
   selector: 'app-content',
@@ -16,34 +16,38 @@ import { List } from '../models/List';
 })
 export class ContentComponent implements OnInit, OnDestroy {
 
-  checkoutForm;
-  taskText: string;
+  fbToDo;
   todos: Array<ToDo>;
-  list: List;
+  activeList: List;
   subscription: Subscription;
 
-  constructor(private formBuilder: FormBuilder, 
-              private mainService: MainService, 
+  constructor(private formBuilder: FormBuilder,
+              private mainService: MainService,
               private authenticationService: AuthenticationService,
               public dialog: MatDialog) {
 
-    this.subscription = 
-      mainService.listSelected.subscribe(x => this.list = x);
+    this.subscription =
+      mainService.listSelected.subscribe(x => {
+        this.activeList = x;
+        this.loadToDos();
+      });
 
-    this.checkoutForm = this.formBuilder.group({
+    this.fbToDo = this.formBuilder.group({
       todoName: ''
     });
 
-    this.list = undefined;
+    this.activeList = new List({id: 1, name: 'Tasks'});
+    this.todos = [];
    }
 
-  ngOnInit() {
-
+  loadToDos() {
     this.mainService
-      .getToDos(this.authenticationService.currentUserValue.id, this.list.id)
+      .getToDos(this.authenticationService.currentUserValue.id, this.activeList.id)
       .subscribe(todos => this.todos = todos);
+  }
 
-    this.taskText = '';
+  ngOnInit() {
+    this.loadToDos();
   }
 
   ngOnDestroy() {
@@ -55,25 +59,34 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   changeStarState(todo: ToDo) {
+    todo.star = !todo.star;
+    this.mainService.updateToDo(todo).subscribe();
+  }
+
+  changeCompleteState(todo: ToDo) {
     todo.done = !todo.done;
     this.mainService.updateToDo(todo).subscribe();
   }
 
   onAddToDo(todoForm) {
     if (!(todoForm.todoName === null || todoForm.todoName === '')) {
-      
+
       const newTodo =
         new ToDo({
-                    id: 0, 
-                    name: todoForm.todoName, 
-                    dateCreate: new Date(), 
-                    idList: this.list.id, 
-                    star: false, 
+                    id: 0,
+                    name: todoForm.todoName,
+                    dateCreate: new Date(),
+                    idList: this.activeList.id,
+                    star: false,
                     idUser: this.authenticationService.currentUserValue.id});
 
       this.mainService
         .insertTodo(newTodo)
-        .subscribe(x => {this.todos.push(newTodo); this.checkoutForm.reset();});
+        .subscribe(x => {
+          newTodo.id = x;
+          this.todos.push(newTodo);
+          this.fbToDo.reset();
+        });
     }
   }
 
@@ -88,7 +101,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
         this.mainService
           .deleteToDo(todo.id)
-          .subscribe(x => { this.todos = this.todos.filter(x => x.id !== todo.id);});
+          .subscribe(x => { this.todos = this.todos.filter(x => x.id !== todo.id); });
       }
     });
   }

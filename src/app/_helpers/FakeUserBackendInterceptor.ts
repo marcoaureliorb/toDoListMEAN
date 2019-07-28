@@ -1,9 +1,9 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HTTP_INTERCEPTORS, HttpInterceptor } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
-import { User } from '../models/user';
+import { delay, dematerialize, materialize, mergeMap } from 'rxjs/operators';
 import { List } from '../models/List';
+import { User } from '../models/user';
 
 @Injectable()
 export class FakeUserBackendInterceptor implements HttpInterceptor {
@@ -11,7 +11,7 @@ export class FakeUserBackendInterceptor implements HttpInterceptor {
 
         const { url, method, headers, body } = request;
         const userDatabase = 'users';
-        const listKeyLocalStorage = 'list'; 
+        const listKeyLocalStorage = 'list';
 
         return of(null)
             .pipe(mergeMap(handleRoute))
@@ -34,7 +34,7 @@ export class FakeUserBackendInterceptor implements HttpInterceptor {
             const {firstName, lastName, email, password} = body;
             const users = getUsersFromLocalStorage();
 
-            if (users.find((x : User) => x.email === email)) {
+            if (users.find((x: User) => x.email === email)) {
                 return error('email "' + email + '" is already taken');
             }
 
@@ -44,10 +44,10 @@ export class FakeUserBackendInterceptor implements HttpInterceptor {
             setUsersToLocalStorage(users);
 
             const lists = getListFromLocalStorage();
-            lists.push(new List({ id: 1, name: 'Task', defaul: true }));
-            lists.push(new List({ id: 2, name: 'Starred', defaul: true }));
+            lists.push(new List({ id: 1, name: 'Task', defaul: true, idUser: user.id }));
+            lists.push(new List({ id: 2, name: 'Starred', defaul: true, idUser: user.id }));
             setListToLocalStorage(lists);
-            
+
             return ok({message: 'ok'});
         }
 
@@ -90,14 +90,14 @@ export class FakeUserBackendInterceptor implements HttpInterceptor {
         }
 
         function getListFromLocalStorage(): Array<List> {
-            const list = JSON.parse(localStorage.getItem(this.listKeyLocalStorage));
+            const list = JSON.parse(localStorage.getItem(listKeyLocalStorage));
             return list || [];
           }
-        
+
         function setListToLocalStorage(list: List[]) {
             const newList = JSON.stringify(list);
             localStorage.setItem(listKeyLocalStorage, newList);
-        }        
+        }
     }
 }
 

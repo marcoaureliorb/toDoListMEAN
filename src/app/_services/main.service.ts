@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
-import { ToDo} from '../models/todo';
-import { List} from '../models/List';
-import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { List } from '../models/List';
+import { ToDo } from '../models/todo';
 
 @Injectable({
   providedIn: 'root'
@@ -22,37 +20,36 @@ export class MainService {
 
   getLists(idUser: number, defaultList: boolean) {
     return this.http
-    .post<any>('http://localhost:4200/list/lists', { idUser, defaultList })
-    .pipe(map(list => { return list; }));
+    .post<Array<List>>('http://localhost:4200/list/lists', { idUser, defaultList });
   }
 
-  insertList(newPersonalizedList: List) {
+  insertList(newList: List) {
     return this.http
-    .post<any>('http://localhost:4200/list/insert', newPersonalizedList);
-  }  
+      .post<number>('http://localhost:4200/list/insert', newList);
+  }
 
   deleteList(idList: number) {
     return this.http
-    .post<any>('http://localhost:4200/list/delete', idList);
-  }  
+    .post<number>('http://localhost:4200/list/delete', idList);
+  }
 
   deleteToDo(idTodo: number) {
     return this.http
-    .post<any>('http://localhost:4200/todo/delete', idTodo);    
-  }  
+    .post<any>('http://localhost:4200/todo/delete', idTodo);
+  }
 
   insertTodo(newTodo: ToDo) {
     return this.http
-    .post<any>('http://localhost:4200/todo/insert', newTodo);  
-  }  
+    .post<number>('http://localhost:4200/todo/insert', newTodo);
+  }
 
   updateToDo(todo: ToDo) {
     return this.http
-    .post<any>('http://localhost:4200/todo/update', todo);  
-  }  
+    .post<any>('http://localhost:4200/todo/update', todo);
+  }
 
   getToDos(idUser: number, idList: number) {
     return this.http
-    .post<any>('http://localhost:4200/todo/all', { idUser, idList });  
-  }  
+    .post<any>('http://localhost:4200/todo/all', { idUser, idList });
+  }
 }

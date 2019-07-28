@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { User } from 'src/app/models/user';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { User } from 'src/app/models/user';
 
 @Injectable()
 export class AuthenticationService {
@@ -15,7 +15,7 @@ export class AuthenticationService {
       this.currentUser = this.currentUserSubject.asObservable();
      }
 
-     login(email: string, password: string){
+     login(email: string, password: string) {
         return this.http
                   .post<any>('http://localhost:4200/users/authenticate', { email, password })
                   .pipe(map(user => {

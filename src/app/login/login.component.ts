@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import { AuthenticationService } from 'src/app/_services/AuthenticationService';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { AuthenticationService } from 'src/app/_services/AuthenticationService';
+
 
 @Component({
   selector: 'app-login',
@@ -38,8 +38,6 @@ export class LoginComponent implements OnInit {
       this.submitted = true;
 
       if (this.checkoutForm.invalid) {
-        console.log(this.f.email.errors);
-        console.log(this.f.email.errors.required);
         return;
       }
 

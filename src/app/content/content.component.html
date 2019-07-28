@@ -1,7 +1,7 @@
 <div class="col">
-  <h4>{{taskText}}</h4>
+  <h4>{{activeList.name}}</h4>
   <div class="content">
-    <form [formGroup]="checkoutForm" (ngSubmit)="onAddToDo(checkoutForm.value)">
+    <form [formGroup]="fbToDo" (ngSubmit)="onAddToDo(fbToDo.value)">
       <div class="row">
         <div class="col">
           <div class="input-group mb-3">
@@ -31,7 +31,8 @@
               <i class="text-success" [ngClass]="(todo.done)?'fa fa-check-circle':'fa fa-circle-o'"></i>
             </button>
           </div>
-          <input type="text" [ngClass]="(todo.done)?'todoDone':''" class="form-control bg-transparent" disabled value="{{todo.name}}">
+          <input type="text" [ngClass]="(todo.done)?'todoDone':''" class="form-control bg-transparent" disabled
+            value="{{todo.name}}">
           <div class="input-group-append">
             <button type="button" class="btn btn-outline-secondary" (click)="changeStarState(todo)">
               <i class="text-warning" [ngClass]="(todo.star)?'fa fa-star':'fa fa-star-o'"></i>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
 import { User } from '../models/user';
@@ -22,10 +22,10 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.fg = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+      firstName: new FormControl(null, {validators: [Validators.required]}),
+      lastName: new FormControl(null, {validators: [Validators.required]}),
+      email: new FormControl(null, {validators: [Validators.required, Validators.email]}),
+      password: new FormControl(null, {validators: [Validators.required, Validators.minLength(6)]})
     });
   }
 
@@ -44,12 +44,18 @@ export class RegisterComponent implements OnInit {
     .pipe(first())
     .subscribe(
       data => {
+        console.log(data);
         this.registerOk = true;
     },
     error => {
       this.loading = false;
       this.isValid = false;
-      this.errMsg = error.error.message;
+      if(error && error.error && error.error.message){
+        this.errMsg = error.error.message;
+      }
+      else{
+        this.errMsg = error;
+      }
     });
   }
 }
