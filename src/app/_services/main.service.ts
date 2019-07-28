@@ -2,111 +2,57 @@ import { Injectable } from '@angular/core';
 import { ToDo} from '../models/todo';
 import { List} from '../models/List';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainService {
 
-  toDoKeyLocalStorage = 'todos';
-  listKeyLocalStorage = 'list';
-
-  private listSelectedSource = new Subject<number>();
-
+  private listSelectedSource = new Subject<List>();
   listSelected = this.listSelectedSource.asObservable();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  onListSelected(idList: number) {
-    this.listSelectedSource.next(idList);
+  onListSelected(list: List) {
+    this.listSelectedSource.next(list);
   }
 
-  getAllToDo(listId: number): Array<ToDo> {
-    return this.getToDosFromLocalStorage().filter((x: ToDo) => x.idList === listId);
+  getLists(idUser: number, defaultList: boolean) {
+    return this.http
+    .post<any>('http://localhost:4200/list/lists', { idUser, defaultList })
+    .pipe(map(list => { return list; }));
   }
 
-  getList(listId: number): List {
-    const lists = this.getListFromLocalStorage();
-    let list = null;
-    lists.forEach(element => {
-      if (element.id === listId) {
-        list = element;
-      }
-    });
+  insertList(newPersonalizedList: List) {
+    return this.http
+    .post<any>('http://localhost:4200/list/insert', newPersonalizedList);
+  }  
 
-    return list;
-  }
+  deleteList(idList: number) {
+    return this.http
+    .post<any>('http://localhost:4200/list/delete', idList);
+  }  
 
-  insertToDo(todo: ToDo) {
-    const todos = this.getToDosFromLocalStorage();
-    todo.id = todos.length + 1;
-    todo.done = todo.done || false;
-    todo.star = todo.star || false;
-    todos.push(todo);
-    this.setToDosToLocalStorage(todos);
-  }
+  deleteToDo(idTodo: number) {
+    return this.http
+    .post<any>('http://localhost:4200/todo/delete', idTodo);    
+  }  
 
-  deleteToDo(todoId: number) {
-    let todos = this.getToDosFromLocalStorage();
-    todos = todos.filter((x: ToDo) => x.id !== todoId);
-    this.setToDosToLocalStorage(todos);
-  }
+  insertTodo(newTodo: ToDo) {
+    return this.http
+    .post<any>('http://localhost:4200/todo/insert', newTodo);  
+  }  
 
   updateToDo(todo: ToDo) {
-    const todos = this.getToDosFromLocalStorage();
-    todos.forEach((x: ToDo) => {
-      if (x.id === todo.id) {
-        x.done = todo.done;
-        x.name = todo.name;
-        x.star = todo.star;
-      }
-    });
+    return this.http
+    .post<any>('http://localhost:4200/todo/update', todo);  
+  }  
 
-    this.setToDosToLocalStorage(todos);
-  }
-
-  getPersonalizedList(): Array<List> {
-    return this.getListFromLocalStorage().filter( (x: List) => !x.defaul);
-  }
-
-  insertList(list: List) {
-    const newList = this.getListFromLocalStorage();
-    list.id = newList.length + 1;
-    list.defaul = false;
-    newList.push(list);
-    this.setListToLocalStorage(newList);
-  }
-
-  deleteList(listId: number) {
-    let newList = this.getListFromLocalStorage();
-    newList = newList.filter((x: List) => x.id !== listId);
-    this.setListToLocalStorage(newList);
-    this.deleteToDoFromList(listId);
-  }
-
-  deleteToDoFromList(listId: number) {
-    let todos = this.getToDosFromLocalStorage();
-    todos = todos.filter((x: ToDo) => x.idList !== listId);
-    this.setToDosToLocalStorage(todos);
-  }
-
-  getListFromLocalStorage(): Array<List> {
-    const list = JSON.parse(localStorage.getItem(this.listKeyLocalStorage));
-    return list || [new List({name: 'Task', id: 1, defaul: true })];
-  }
-
-  setListToLocalStorage(list: List[]) {
-    const newList = JSON.stringify(list);
-    localStorage.setItem(this.listKeyLocalStorage, newList);
-  }
-
-  getToDosFromLocalStorage(): Array<ToDo> {
-    const todos = JSON.parse(localStorage.getItem(this.toDoKeyLocalStorage));
-    return todos || [];
-  }
-
-  setToDosToLocalStorage(todos: ToDo[]) {
-    const newTodos = JSON.stringify(todos);
-    localStorage.setItem(this.toDoKeyLocalStorage, newTodos);
-  }
+  getToDos(idUser: number, idList: number) {
+    return this.http
+    .post<any>('http://localhost:4200/todo/all', { idUser, idList });  
+  }  
 }

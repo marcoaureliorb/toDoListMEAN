@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule, MatButtonModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material/dialog';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +18,9 @@ import { RegisterComponent } from './register/register.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
 import { MainComponent } from './main/main.component';
 import { MenuLeftComponent } from './menu-left/menu-left.component';
-import { FakeBackendInterceptor } from './_helpers/fakeBackendInterceptor';
+import { fakeUserBackendProvider } from './_helpers/FakeUserBackendInterceptor';
+import { fakeTodoBackendProvider } from './_helpers/FakeTodoBackendInterceptor';
+import { fakeListBackendProvider } from './_helpers/FakeListBackendInterceptor';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { FakeBackendInterceptor } from './_helpers/fakeBackendInterceptor';
   ],
   entryComponents: [DialogComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
+    fakeTodoBackendProvider,
+    fakeUserBackendProvider,
+    fakeListBackendProvider,
     AuthenticationService,
     AuthenticationGard
   ],

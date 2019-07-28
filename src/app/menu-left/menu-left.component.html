@@ -1,58 +1,51 @@
-<ul class="list-group">
-    <div class="row hover-cursor" (click)="onListSelected(1)">
-      <div class="col-1">
-        <i class="fa fa-tasks" aria-hidden="true"></i>
-      </div>
-      <div class="col">
-        Tasks
-      </div>
-      <div class="col-1">
-          <span class="badge badge-info">6</span>
-      </div>      
-    </div>
-    <div class="row hover-cursor" (click)="onListSelected(2)">
-        <div class="col-1">
-          <i class="fa fa-tasks" aria-hidden="true"></i>
-        </div>
-        <div class="col">
-            Starred
-        </div>
-        <div class="col-1">
-            <span class="badge badge-info">6</span>
-        </div>        
-      </div>    
-</ul>
-<hr>
-<div class="row">
-  <div class=col></div>
+<div class="row hover-cursor" (click)="onListSelected({id: 1, name: 'Tasks'})">
+  <div class="col-1">
+    <i class="fa fa-tasks" aria-hidden="true"></i>
+  </div>
+  <div class="col">
+    Tasks
+  </div>
+  <div class="col-1">
+    <span class="badge badge-secondary">6</span>
+  </div>
 </div>
-<ul class="list-group">
-  <div class="row hover-cursor" (click)="onListSelected(list.id)" *ngFor="let list of personalizedList">
-    <div class="col-1">
-      <i class="fa fa-tasks" aria-hidden="true"></i>
-    </div>
-    <div class="col">
-      {{list.name}}
-    </div>
-    <div class="col-1">
-        <span class="badge badge-info">6</span>
-    </div>
-    <div class="col-1">
-      <i class="text-danger fa fa-trash-o" (click)="deletePersonalizedList(list)"></i>
-    </div>
+<div class="row hover-cursor" (click)="onListSelected({id: 1, name: 'Tasks'})">
+  <div class="col-1">
+    <i class="fa fa-tasks" aria-hidden="true"></i>
   </div>
-</ul>
+  <div class="col">
+    Starred
+  </div>
+  <div class="col-1">
+    <span class="badge badge-secondary">6</span>
+  </div>
+</div>
+<hr>
+<div class="row hover-cursor" (click)="onListSelected(list)" *ngFor="let list of personalizedList">
+  <div class="col-1">
+    <i class="fa fa-tasks" aria-hidden="true"></i>
+  </div>
+  <div class="col">
+    {{list.name}}
+  </div>
+  <div class="col-1">
+    <span class="badge badge-secondary">6</span>
+  </div>
+  <div class="col-1 text-left">
+    <i class="text-danger fa fa-trash-o" (click)="deletePersonalizedList(list)"></i>
+  </div>
+</div>
 <p>
-<form [formGroup]="personalizedListForm" (ngSubmit)="onAddPersonalizedList(personalizedListForm.value)">
-  <div class="row">
-    <div class=col>
+  <form [formGroup]="personalizedListForm" (ngSubmit)="onAddPersonalizedList(personalizedListForm.value)">
+    <div class="row">
+      <div class=col>
         <div class="input-group mb-3">
-            <input type="text" id="listName" formControlName="listName" class="form-control " placeholder="add new list">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-plus"></i>
-              </button>
-            </div>
+          <input type="text" id="listName" formControlName="listName" class="form-control " placeholder="add new list">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-plus"></i>
+            </button>
           </div>
+        </div>
+      </div>
     </div>
-  </div>
-</form>
+  </form>

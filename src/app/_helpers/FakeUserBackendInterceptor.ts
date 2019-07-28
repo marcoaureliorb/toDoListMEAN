@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HTTP_INTERCEPTORS, HttpInterceptor } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 import { User } from '../models/user';
+import { List } from '../models/List';
 
 @Injectable()
-export class FakeBackendInterceptor implements HttpInterceptor {
+export class FakeUserBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         const { url, method, headers, body } = request;
         const userDatabase = 'users';
+        const listKeyLocalStorage = 'list'; 
 
         return of(null)
             .pipe(mergeMap(handleRoute))
@@ -39,9 +41,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             const user = new User({firstName, lastName, email, password});
             user.id = users.length + 1;
             users.push(user);
-
             setUsersToLocalStorage(users);
-            return ok();
+
+            const lists = getListFromLocalStorage();
+            lists.push(new List({ id: 1, name: 'Task', defaul: true }));
+            lists.push(new List({ id: 2, name: 'Starred', defaul: true }));
+            setListToLocalStorage(lists);
+            
+            return ok({message: 'ok'});
         }
 
         function authenticate() {
@@ -75,11 +82,27 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function getUsersFromLocalStorage(): Array<User> {
             const users  = JSON.parse(localStorage.getItem(userDatabase));
             return users || [];
-          }
+        }
 
         function  setUsersToLocalStorage(users: Array<User>) {
             const newUsers  = JSON.stringify(users);
             localStorage.setItem(userDatabase, newUsers);
+        }
+
+        function getListFromLocalStorage(): Array<List> {
+            const list = JSON.parse(localStorage.getItem(this.listKeyLocalStorage));
+            return list || [];
           }
+        
+        function setListToLocalStorage(list: List[]) {
+            const newList = JSON.stringify(list);
+            localStorage.setItem(listKeyLocalStorage, newList);
+        }        
     }
 }
+
+export const fakeUserBackendProvider = {
+    provide: HTTP_INTERCEPTORS,
+    useClass: FakeUserBackendInterceptor,
+    multi: true
+};
