@@ -16,7 +16,7 @@ export class FakeListBackendInterceptor implements HttpInterceptor {
         return of(null)
             .pipe(mergeMap(handleRoute))
             .pipe(materialize())
-            .pipe(delay(1000))
+            .pipe(delay(300))
             .pipe(dematerialize());
 
         function handleRoute() {
